@@ -54,5 +54,10 @@ function generateForm({ edges }) {
 
 const parsed = parseNodes(input);
 const html = generateForm(parsed);
+
+// 🧱 Skapa mappen om den inte finns
+fs.mkdirSync('./public', { recursive: true });
+
+// ✍️ Skriv filen
 fs.writeFileSync('./public/index.html', html);
 console.log('Formulär genererat till public/index.html');
