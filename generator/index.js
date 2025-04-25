@@ -7,15 +7,12 @@ const template = fs.readFileSync('./templates/form-template.ejs', 'utf-8');
 
 function parseNodes(mermaid) {
   const lines = mermaid.split('\n');
-  const nodes = [];
+
+  // Extrahera alla noder, frågor och kanter
+  const nodes = {};
   const edges = [];
-  const sections = [];
-  const questions = [];
-  const recommendations = [];
 
-  // Mappning för att hålla koll på noder
-  const nodeContents = {};
-
+  // Först, identifiera alla noder
   lines.forEach(line => {
     line = line.trim();
     if (!line) return;
@@ -23,43 +20,58 @@ function parseNodes(mermaid) {
     // Matcha sektioner: A[**1 Typ av process**]
     const sectionMatch = line.match(/(\w+)\s*\[\*\*(.*?)\*\*\]/);
     if (sectionMatch) {
-      const [, nodeId, title] = sectionMatch;
-      sections.push({ id: nodeId, title: title.trim() });
-      nodeContents[nodeId] = title.trim();
+      const [, id, title] = sectionMatch;
+      nodes[id] = {
+        id,
+        type: 'section',
+        title: title.trim(),
+        questions: []
+      };
       return;
     }
 
     // Matcha frågor: B{Har processen tidsbestämda steg?}
     const questionMatch = line.match(/(\w+)\s*\{(.*?)\}/);
     if (questionMatch) {
-      const [, nodeId, text] = questionMatch;
-      questions.push({ id: nodeId, text: text.trim() });
-      nodeContents[nodeId] = { type: 'question', text: text.trim() };
-      nodes.push({ id: nodeId, type: 'question', text: text.trim() });
+      const [, id, text] = questionMatch;
+      nodes[id] = {
+        id,
+        type: 'question',
+        text: text.trim(),
+        answers: []
+      };
       return;
     }
 
-    // Matcha rekommendationer/anvisningar: C[Skapa en Process]
+    // Matcha rekommendationer/svar: C[Skapa en Process]
     const recommendationMatch = line.match(/(\w+)\s*\[(.*?)\]/);
     if (recommendationMatch && !sectionMatch) {
-      const [, nodeId, text] = recommendationMatch;
-      recommendations.push({ id: nodeId, text: text.trim() });
-      nodeContents[nodeId] = { type: 'recommendation', text: text.trim() };
-      nodes.push({ id: nodeId, type: 'recommendation', text: text.trim() });
+      const [, id, text] = recommendationMatch;
+      nodes[id] = {
+        id,
+        type: 'recommendation',
+        text: text.trim()
+      };
       return;
     }
+  });
 
-    // Matcha envalskanter: B -->|Ja| C
-    const singleChoiceMatch = line.match(/(\w+)\s*-->\s*\|(.*?)\|\s*(\w+)/);
-    if (singleChoiceMatch) {
-      const [, from, label, to] = singleChoiceMatch;
+  // Sedan, identifiera alla kopplingar
+  lines.forEach(line => {
+    line = line.trim();
+    if (!line) return;
+
+    // Matcha envalskanter med etikett: B -->|Ja| C
+    const singleChoiceLabelMatch = line.match(/(\w+)\s*-->\s*\|(.*?)\|\s*(\w+)/);
+    if (singleChoiceLabelMatch) {
+      const [, from, label, to] = singleChoiceLabelMatch;
       edges.push({ from, to, label: label.trim(), multiple: false });
       return;
     }
 
-    // Matcha enkla pilar: A --> B
+    // Matcha enkla pilar utan etikett: A --> B
     const simpleArrowMatch = line.match(/(\w+)\s*-->\s*(\w+)/);
-    if (simpleArrowMatch) {
+    if (simpleArrowMatch && !singleChoiceLabelMatch) {
       const [, from, to] = simpleArrowMatch;
       edges.push({ from, to, multiple: false });
       return;
@@ -74,59 +86,63 @@ function parseNodes(mermaid) {
     }
   });
 
-  return { nodes, edges, sections, questions, recommendations };
-}
+  // Bygg upp den fullständiga strukturen
+  // 1. Hitta alla direkta kopplingar från sektioner till frågor
+  edges.forEach(edge => {
+    const fromNode = nodes[edge.from];
+    const toNode = nodes[edge.to];
 
-function buildFormStructure(parsedData) {
-  const { sections, questions, edges, recommendations } = parsedData;
+    if (fromNode && toNode) {
+      // Om från-noden är en sektion och till-noden är en fråga
+      if (fromNode.type === 'section' && toNode.type === 'question') {
+        fromNode.questions.push(toNode);
+      }
 
-  // Gruppera frågor och rekommendationer efter sektion
-  const formStructure = [];
-
-  // Skapa en mappning från frågans ID till själva frågan
-  const questionsMap = {};
-  questions.forEach(q => questionsMap[q.id] = q);
-
-  // Skapa en mappning från rekommendationens ID till själva rekommendationen
-  const recommendationsMap = {};
-  recommendations.forEach(r => recommendationsMap[r.id] = r);
-
-  // För varje sektion, hitta relaterade frågor och deras svarsalternativ
-  sections.forEach(section => {
-    const sectionData = {
-      title: section.title,
-      questions: []
-    };
-
-    // Hitta alla pilar som utgår från denna sektion
-    const sectionEdges = edges.filter(e => e.from === section.id);
-    sectionEdges.forEach(edge => {
-      if (questionsMap[edge.to]) {
-        // Om pilen går till en fråga
-        const question = questionsMap[edge.to];
-
-        // Hitta alla svarsalternativ för denna fråga
-        const answers = edges.filter(e => e.from === question.id).map(e => {
-          return {
-            text: e.label || "Välj",
-            target: e.to,
-            multiple: e.multiple,
-            recommendation: recommendationsMap[e.to] ? recommendationsMap[e.to].text : null
-          };
-        });
-
-        sectionData.questions.push({
-          id: question.id,
-          text: question.text,
-          answers: answers
+      // Om från-noden är en fråga och till-noden är ett svar
+      if (fromNode.type === 'question' && edge.label) {
+        fromNode.answers.push({
+          text: edge.label,
+          targetId: edge.to,
+          multiple: edge.multiple || false,
+          recommendation: toNode && toNode.type === 'recommendation' ? toNode.text : null
         });
       }
-    });
-
-    formStructure.push(sectionData);
+    }
   });
 
-  return formStructure;
+  // 2. Hitta indirekta kopplingar (sektion -> mellanliggande nod -> fråga)
+  edges.forEach(edge => {
+    const fromNode = nodes[edge.from];
+    const toNode = nodes[edge.to];
+
+    if (fromNode && toNode) {
+      // Om från-noden inte är en sektion men har en koppling till en fråga
+      if (fromNode.type !== 'section' && toNode.type === 'question') {
+        // Leta efter sektioner som pekar på denna nod
+        edges.forEach(innerEdge => {
+          const sectionNode = nodes[innerEdge.from];
+          if (sectionNode && sectionNode.type === 'section' && innerEdge.to === edge.from) {
+            // Lägg till frågan i sektionen
+            if (!sectionNode.questions.find(q => q.id === toNode.id)) {
+              sectionNode.questions.push(toNode);
+            }
+          }
+        });
+      }
+    }
+  });
+
+  // Skapa en lista med sektioner i rätt ordning
+  const sections = Object.values(nodes)
+    .filter(node => node.type === 'section')
+    .sort((a, b) => {
+      // Sortera efter sektionens nummer om det finns
+      const aNum = parseInt((a.title.match(/^(\d+)/) || [])[1] || '0');
+      const bNum = parseInt((b.title.match(/^(\d+)/) || [])[1] || '0');
+      return aNum - bNum;
+    });
+
+  return { nodes, edges, sections };
 }
 
 // Skapa mappen om den inte finns
@@ -135,19 +151,8 @@ fs.mkdirSync('./public', { recursive: true });
 // Analysera mermaid-data
 const parsedData = parseNodes(input);
 
-// Bygg formulärstruktur
-const formStructure = buildFormStructure(parsedData);
-
 // Använd EJS för att generera HTML
-const html = ejs.render(template, {
-  parsedData,
-  formStructure,
-  // Hjälpfunktion för att hitta rekommendation för ett svar
-  getRecommendation: (to, recommendations, nodes) => {
-    const recNode = nodes.find(n => n.id === to && n.type === 'recommendation');
-    return recNode ? recNode.text : null;
-  }
-});
+const html = ejs.render(template, { parsedData });
 
 fs.writeFileSync('./public/index.html', html);
 console.log('Formulär genererat till public/index.html');
