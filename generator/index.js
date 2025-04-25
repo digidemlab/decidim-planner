@@ -52,7 +52,6 @@ function parseNodes(mermaid) {
         type: 'recommendation',
         text: text.trim()
       };
-      return;
     }
   });
 
@@ -73,7 +72,7 @@ function parseNodes(mermaid) {
     const simpleArrowMatch = line.match(/(\w+)\s*-->\s*(\w+)/);
     if (simpleArrowMatch && !singleChoiceLabelMatch) {
       const [, from, to] = simpleArrowMatch;
-      edges.push({ from, to, multiple: false });
+      edges.push({ from, to, label: '', multiple: false });
       return;
     }
 
@@ -82,12 +81,13 @@ function parseNodes(mermaid) {
     if (multiChoiceMatch) {
       const [, from, label, to] = multiChoiceMatch;
       edges.push({ from, to, label: label.trim(), multiple: true });
-      return;
     }
   });
 
-  // Bygg upp den fullständiga strukturen
-  // 1. Hitta alla direkta kopplingar från sektioner till frågor
+  // Identifiera sektioner och direkta frågor
+  const sectionQuestionMap = {};
+
+  // Först, hitta direkta kopplingar från sektioner till frågor
   edges.forEach(edge => {
     const fromNode = nodes[edge.from];
     const toNode = nodes[edge.to];
@@ -95,41 +95,36 @@ function parseNodes(mermaid) {
     if (fromNode && toNode) {
       // Om från-noden är en sektion och till-noden är en fråga
       if (fromNode.type === 'section' && toNode.type === 'question') {
-        fromNode.questions.push(toNode);
-      }
-
-      // Om från-noden är en fråga och till-noden är ett svar
-      if (fromNode.type === 'question' && edge.label) {
-        fromNode.answers.push({
-          text: edge.label,
-          targetId: edge.to,
-          multiple: edge.multiple || false,
-          recommendation: toNode && toNode.type === 'recommendation' ? toNode.text : null
-        });
+        if (!sectionQuestionMap[fromNode.id]) {
+          sectionQuestionMap[fromNode.id] = new Set();
+        }
+        sectionQuestionMap[fromNode.id].add(toNode.id);
       }
     }
   });
 
-  // 2. Hitta indirekta kopplingar (sektion -> mellanliggande nod -> fråga)
+  // Associera frågor med svar
   edges.forEach(edge => {
     const fromNode = nodes[edge.from];
     const toNode = nodes[edge.to];
 
-    if (fromNode && toNode) {
-      // Om från-noden inte är en sektion men har en koppling till en fråga
-      if (fromNode.type !== 'section' && toNode.type === 'question') {
-        // Leta efter sektioner som pekar på denna nod
-        edges.forEach(innerEdge => {
-          const sectionNode = nodes[innerEdge.from];
-          if (sectionNode && sectionNode.type === 'section' && innerEdge.to === edge.from) {
-            // Lägg till frågan i sektionen
-            if (!sectionNode.questions.find(q => q.id === toNode.id)) {
-              sectionNode.questions.push(toNode);
-            }
-          }
-        });
-      }
+    if (fromNode && fromNode.type === 'question' && edge.label) {
+      // Här lägger vi till svaret i frågan
+      fromNode.answers.push({
+        text: edge.label,
+        targetId: edge.to,
+        multiple: edge.multiple || false,
+        recommendation: toNode && toNode.type === 'recommendation' ? toNode.text : null
+      });
     }
+  });
+
+  // Bygg upp sektioner med deras frågor
+  Object.keys(sectionQuestionMap).forEach(sectionId => {
+    const section = nodes[sectionId];
+    sectionQuestionMap[sectionId].forEach(questionId => {
+      section.questions.push(nodes[questionId]);
+    });
   });
 
   // Skapa en lista med sektioner i rätt ordning
@@ -150,6 +145,14 @@ fs.mkdirSync('./public', { recursive: true });
 
 // Analysera mermaid-data
 const parsedData = parseNodes(input);
+
+// Debugging: Logga strukturen för att se vad som händer
+console.log('Sections:', parsedData.sections.map(s => ({
+  id: s.id,
+  title: s.title,
+  questionCount: s.questions.length,
+  questions: s.questions.map(q => q.id)
+})));
 
 // Använd EJS för att generera HTML
 const html = ejs.render(template, { parsedData });

@@ -43,7 +43,7 @@
                     <% }) %>
                   </div>
                 <% } else { %>
-                  <p class="text-gray-600 italic">Inga svarsalternativ tillgängliga för denna fråga.</p>
+                  <textarea class="w-full p-3 border rounded-lg" rows="3" placeholder="Skriv ditt svar här..."></textarea>
                 <% } %>
               </div>
             <% }) %>
@@ -87,6 +87,7 @@
         const selectedAnswers = [];
         const radioInputs = form.querySelectorAll('input[type="radio"]:checked');
         const checkboxInputs = form.querySelectorAll('input[type="checkbox"]:checked');
+        const textareas = form.querySelectorAll('textarea');
 
         // Funktion för att extrahera information
         function extractAnswerInfo(input) {
@@ -94,6 +95,20 @@
           if (!questionContainer) return null;
 
           const questionText = questionContainer.querySelector('h3').textContent;
+
+          // Om det är en textarea
+          if (input.tagName === 'TEXTAREA') {
+            const answerText = input.value.trim();
+            if (!answerText) return null;
+
+            return {
+              question: questionText,
+              answer: answerText,
+              recommendation: null
+            };
+          }
+
+          // Om det är en checkbox eller radioknapp
           const label = input.nextElementSibling;
           if (!label) return null;
 
@@ -128,6 +143,14 @@
         checkboxInputs.forEach(input => {
           const info = extractAnswerInfo(input);
           if (info) selectedAnswers.push(info);
+        });
+
+        // Samla textareas med innehåll
+        textareas.forEach(textarea => {
+          if (textarea.value.trim()) {
+            const info = extractAnswerInfo(textarea);
+            if (info) selectedAnswers.push(info);
+          }
         });
 
         // Visa sammanfattningen
