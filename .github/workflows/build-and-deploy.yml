@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:  # Möjliggör manuell körning
 
 jobs:
   build:
@@ -16,12 +17,23 @@ jobs:
         with:
           node-version: '18'
 
-      - run: npm install
-      - run: npm run build  # Kör index.js som skapar HTML
+      - name: Install dependencies
+        run: npm install ejs
+
+      - name: Create asset directories
+        run: mkdir -p public/assets/js
+
+      - name: Generate HTML
+        run: node generator/index.js
+
+      - name: Copy JS files to public directory
+        run: |
+          # Kopierar JavaScript-filerna till public-mappen om de inte redan finns där
+          cp -r assets/js/* public/assets/js/ || echo "No assets/js directory found"
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./public    # Mappen som innehåller den genererade HTML
+          publish_dir: ./public

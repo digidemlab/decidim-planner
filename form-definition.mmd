@@ -1,23 +1,30 @@
-graph LR
+---
+title: Planeringsverktyg Decidim
+---
 
-  	A[**1 Typ av process**] --> B{Har processen tidsbestämda steg?}
+graph LR
+  	A[**1 Typ av process**]
+    A --> B{Har processen tidsbestämda steg?}
     B -->|Ja| C[Skapa en Process]
-    C --> K[Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande]
+    C --> K["Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande"]
     B -->|Nej| D[Skapa ett Samråd]
     D --> GA[Lägg eventuellt till presentationer av officiella deltagare]
     GA --> L[Lägg till Komponenter]
     K --> L[Lägg till Komponenter]
 
-    M[**2 Deltagare**] --> E{Vilka ska kunna delta?}
+    M[**2 Deltagare**]
+    M --> E{Vilka ska kunna delta?}
     E -->|Alla| G[Gå vidare]
-    E -->|Inbjudna| H[Ställ in som Privat] --> F{Vilka ska kunna se processen?}
+    E -->|Inbjudna| H[Ställ in som Privat]
+    H --> F{Vilka ska kunna se processen?}
     F -->|Alla| I[Ställ in som Transparent]
     F -->|Inbjudna| J[Gå vidare]
 
     N[**3 Förslag**]
     N --> O{Ska förslag leda till beslut?}
     O -->|Nej, bara diskussion| P[Lägg till komponenten Debatt för att kunna sammanfatta diskussioner. Eller använd förslagskomponenten med kommentarer aktiverade.]
-    O -->|Ja| Q[Lägg till komponenten Förslag] --> R{Hur skapas förslag?}
+    O -->|Ja| Q[Lägg till komponenten Förslag]
+    Q --> R{Hur skapas förslag?}
     Q --> QA{Är förslagen knutna till geografiska platser?}
   	QA -->|Ja| QB[Aktivera Visning på karta]
     R -.->|Deltagare skapar egna förslag| S[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
@@ -27,7 +34,8 @@ graph LR
   	R -.->|Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren | W[Aktivera ändringsförslag]
     R -.->|Förslagen tas fram på möten | WA[Koppla förslagen till möten i möteskomponenten]
 
-    X[**4 Beslut** ] --> Y{Hur fattas beslut?}
+    X[**4 Beslut**]
+    X --> Y{Hur fattas beslut?}
     Y --> |Deltagare röstar. Förslag som fått röster upp till en viss gräns går vidare| Z[Aktivera Röster under aktuellt steg för Förslag. Ställ in Minst antal stöd per förslag som gräns och Antal röster per deltagare]
     Y --> |Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad| BB[Lägg till komponenten Budget. När Förslagsinlämningen är klar importerar du förslag från Förslagskomponenten till Budgetkomponenten.]
     BB --> BC{Hur väljer deltagarna förslag?}
@@ -35,7 +43,11 @@ graph LR
     BC --> |Upp till en viss summa| BE[Test]
     Y --> |Processen är rådgivande men det ska synas vilka förslag som är populärast| CB[Aktivera gilla-markeringar för aktuellt steg. Eller aktivera Röster under aktuellt steg och sätt Minst antal stöd per förslag till 0 för att inte ha någon specifik gräns för antal röster]
 
-    DB[**5 Möten**] --> HB[Lägg till komponenten Möten]
-    HB --> EB{Är mötena fysiska eller digitala?}
+    DB[**5 Möten**]
+    DB --> HB[Lägg till komponenten Möten]
+    HB --> EB{Är mötena fysiska eller digitala eller olika för olika möten?}
+    EB -.-> |Fysiska| IB[Lägg till möte och ställ in Fysiskt. Lägg till adress och vägbeskrivning.]
+    EB -.-> |Digitala| JB[Lägg till möte och ställ in Digitalt. Lägg till länk till Jitsi för att bädda in videomöte på sidan.]
+    EB -.-> |Hybridmöten| KB[Lägg till möte och ställ in Hybridmöte. Lägg till adress och vägbeskrivning. Lägg till länk till Jitsi för att bädda in videomöte på sidan.]
     HB --> FB{Behöver deltagare anmäla sig?}
     HB --> GB{Finns det en dagordning?}

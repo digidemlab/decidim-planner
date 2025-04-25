@@ -3,261 +3,284 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Processskapare</title>
+  <title><%= parsedData.title %></title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js"></script>
+  <style>
+    .hidden-question {
+      display: none;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .tab-content.active div {
+      overflow: hidden;
+    }
+    .mermaid-container {
+      overflow: auto;
+      padding: 20px;
+      transition: transform 0.3s ease;
+      transform-origin: center top;
+    }
+  </style>
 </head>
 <body class="p-6 bg-gray-50">
-  <div class="max-w-4xl mx-auto bg-white p-8 shadow-md rounded-lg">
-    <h1 class="text-3xl font-bold mb-8 text-center text-blue-800">Processskapare</h1>
+  <div class="max-w-5xl mx-auto bg-white p-8 shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold mb-6 text-center text-blue-800"><%= parsedData.title %></h1>
 
-    <form id="processForm" class="space-y-12">
-      <% parsedData.sections.forEach((section, sectionIndex) => { %>
-        <div class="section border-t-2 pt-6" id="section-<%= section.id %>">
-          <h2 class="text-2xl font-semibold mb-6"><%= section.title %></h2>
-
-          <% if (section.questions && section.questions.length > 0) { %>
-            <% section.questions.forEach((question, questionIndex) => { %>
-              <div class="question-container mb-8">
-                <h3 class="text-xl font-medium mb-4"><%= question.text %></h3>
-
-                <% if (question.answers && question.answers.length > 0) { %>
-                  <div class="answers-container space-y-3">
-                    <% question.answers.forEach((answer, answerIndex) => { %>
-                      <div class="answer flex items-start space-x-3">
-                        <input type="<%= answer.multiple ? 'checkbox' : 'radio' %>"
-                               name="question-<%= question.id %>"
-                               id="answer-<%= question.id %>-<%= answerIndex %>"
-                               value="<%= answer.targetId %>"
-                               class="mt-1">
-                        <label for="answer-<%= question.id %>-<%= answerIndex %>" class="text-lg">
-                          <%= answer.text %>
-
-                          <% if (answer.recommendation) { %>
-                            <span class="text-sm block mt-1 text-gray-600">
-                              (→ <%= answer.recommendation %>)
-                            </span>
-                          <% } %>
-                        </label>
-                      </div>
-                    <% }) %>
-                  </div>
-                <% } else { %>
-                  <textarea class="w-full p-3 border rounded-lg" rows="3" placeholder="Skriv ditt svar här..."></textarea>
-                <% } %>
-              </div>
-            <% }) %>
-          <% } else { %>
-            <p class="text-gray-600 italic">Inga frågor tillgängliga för denna sektion.</p>
+    <!-- Tab Navigation with Tailwind -->
+    <div class="border-b border-gray-200 mb-6">
+      <div class="flex justify-center">
+        <nav class="flex space-x-8" aria-label="Tabs">
+          <button class="tab-button px-3 py-2 border-b-2 font-medium text-sm border-blue-500 text-blue-600 active"
+                  data-tab="form-tab"
+                  aria-current="page">
+            Formulär
+          </button>
+          <button class="tab-button px-3 py-2 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  data-tab="diagram-tab">
+            Process-diagram
+          </button>
+          <% if (parsedData.rawMermaid) { %>
+            <button class="tab-button px-3 py-2 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    data-tab="code-tab">
+              Mermaid kod
+            </button>
           <% } %>
-        </div>
-      <% }) %>
+        </nav>
+      </div>
+    </div>
 
-      <div class="pt-8 border-t-2">
-        <button type="button" id="summarizeBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
-          Sammanfatta dina val
+    <!-- Form Tab Content -->
+    <div id="form-tab" class="tab-content active">
+      <form id="processForm" class="space-y-12">
+        <% parsedData.sections.forEach((section, sectionIndex) => { %>
+          <div class="section border-t-2 pt-6" id="section-<%= section.id %>">
+            <h2 class="text-2xl font-semibold mb-6"><%= section.title %></h2>
+
+            <% if (section.questions && section.questions.length > 0) { %>
+              <%
+              // Första omgången - Identifiera frågor utan beroenden så dessa kan visas först
+              let questionsWithoutDependencies = section.questions.filter(q =>
+                (!q.dependencies || q.dependencies.length === 0) &&
+                (!q.indirectDependencies || q.indirectDependencies.length === 0)
+              );
+
+              // Andra omgången - Frågor med beroenden
+              let questionsWithDependencies = section.questions.filter(q =>
+                (q.dependencies && q.dependencies.length > 0) ||
+                (q.indirectDependencies && q.indirectDependencies.length > 0)
+              );
+
+              // Alla frågor i ordning, först utan beroenden, sedan med
+              let orderedQuestions = [...questionsWithoutDependencies, ...questionsWithDependencies];
+              %>
+
+              <% orderedQuestions.forEach((question, questionIndex) => { %>
+                <%
+                // Skapa en datastruktur som beskriver alla beroenden för JavaScript
+                let dependencyData = [];
+
+                // Lägg till direkta beroenden
+                if (question.dependencies && question.dependencies.length > 0) {
+                  question.dependencies.forEach(dep => {
+                    dependencyData.push({
+                      type: 'direct',
+                      questionId: dep.questionId,
+                      answer: dep.answer,
+                      multiple: dep.multiple || false
+                    });
+                  });
+                }
+
+                // Lägg till indirekta beroenden
+                if (question.indirectDependencies && question.indirectDependencies.length > 0) {
+                  question.indirectDependencies.forEach(dep => {
+                    dependencyData.push({
+                      type: 'indirect',
+                      questionId: dep.questionId,
+                      answer: dep.answer,
+                      multiple: dep.multiple || false,
+                      via: dep.via
+                    });
+                  });
+                }
+
+                // Konvertera till JSON-sträng för data-attributet
+                let dependencyJson = JSON.stringify(dependencyData);
+
+                // Frågan ska vara dold om den har något beroende
+                let isInitiallyHidden = dependencyData.length > 0;
+                %>
+
+                <div class="question-container mb-8 <%= isInitiallyHidden ? 'hidden-question' : '' %>"
+                     id="question-<%= question.id %>"
+                     data-dependencies="<%= dependencyJson %>">
+                  <h3 class="text-xl font-medium mb-4"><%= question.text %></h3>
+
+                  <% if (question.answers && question.answers.length > 0) { %>
+                    <div class="answers-container space-y-3">
+                      <% if (question.answers.length === 1) { %>
+                        <!-- Om det bara finns ett svarsalternativ, visa som kryssruta -->
+                        <div class="answer flex items-start space-x-3">
+                          <input type="checkbox"
+                                 name="question-<%= question.id %>"
+                                 id="answer-<%= question.id %>-0"
+                                 value="<%= question.answers[0].targetId %>"
+                                 data-question-id="<%= question.id %>"
+                                 data-answer-text="<%= question.answers[0].text %>"
+                                 class="mt-1 answer-input">
+                          <label for="answer-<%= question.id %>-0" class="text-lg">
+                            <%= question.answers[0].text %>
+
+                            <% if (question.answers[0].recommendation) { %>
+                              <span class="text-sm block mt-1 text-gray-600">
+                                <%= question.answers[0].recommendation %>
+                              </span>
+                            <% } %>
+                          </label>
+                        </div>
+                      <% } else { %>
+                        <!-- Flera svarsalternativ -->
+                        <% question.answers.forEach((answer, answerIndex) => { %>
+                          <div class="answer flex items-start space-x-3">
+                            <input type="<%= answer.multiple ? 'checkbox' : 'radio' %>"
+                                   name="question-<%= question.id %>"
+                                   id="answer-<%= question.id %>-<%= answerIndex %>"
+                                   value="<%= answer.targetId %>"
+                                   data-question-id="<%= question.id %>"
+                                   data-answer-text="<%= answer.text %>"
+                                   class="mt-1 answer-input">
+                            <label for="answer-<%= question.id %>-<%= answerIndex %>" class="text-lg">
+                              <%= answer.text %>
+
+                              <% if (answer.recommendation) { %>
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  <%= answer.recommendation %>
+                                </span>
+                              <% } %>
+                            </label>
+                          </div>
+                        <% }) %>
+                      <% } %>
+                    </div>
+                  <% } else { %>
+                    <textarea class="w-full p-3 border rounded-lg"
+                            name="question-<%= question.id %>"
+                            rows="3"
+                            placeholder="Skriv ditt svar här..."></textarea>
+                  <% } %>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p class="text-gray-600 italic">Inga frågor tillgängliga för denna sektion.</p>
+            <% } %>
+          </div>
+        <% }) %>
+
+        <div class="pt-8 border-t-2">
+          <button type="button" id="summarizeBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
+            Sammanfatta dina val
+          </button>
+        </div>
+      </form>
+
+      <div id="summary" class="mt-8 hidden pt-8 border-t-2">
+        <h2 class="text-2xl font-semibold mb-6">Sammanfattning av dina val</h2>
+        <div id="summaryContent" class="bg-gray-50 p-6 rounded-lg">
+          <!-- Innehåll genereras dynamiskt -->
+        </div>
+
+        <button id="downloadPDF" class="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
+          Ladda ner PDF
         </button>
       </div>
-    </form>
-
-    <div id="summary" class="mt-8 hidden pt-8 border-t-2">
-      <h2 class="text-2xl font-semibold mb-6">Sammanfattning av dina val</h2>
-      <div id="summaryContent" class="bg-gray-50 p-6 rounded-lg">
-        <!-- Innehåll genereras dynamiskt -->
-      </div>
-
-      <button id="downloadPDF" class="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
-        Ladda ner PDF
-      </button>
     </div>
+
+    <!-- Diagram Tab Content -->
+    <div id="diagram-tab" class="tab-content active">
+      <div class="bg-gray-50 p-4 rounded-lg mb-4">
+        <div id="diagram-container" class="mermaid-container">
+          <div class="mermaid" id="mermaid-diagram">
+            <%= parsedData.rawMermaid %>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-6">
+        <button id="zoom-in" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+          Zooma in
+        </button>
+        <button id="zoom-out" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+          </svg>
+          Zooma ut
+        </button>
+        <button id="reset-zoom" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+          </svg>
+          Återställ zoom
+        </button>
+      </div>
+    </div>
+
+    <!-- Code Tab Content -->
+    <% if (parsedData.rawMermaid) { %>
+      <div id="code-tab" class="tab-content">
+        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-auto">
+          <pre class="whitespace-pre-wrap"><code><%= parsedData.rawMermaid %></code></pre>
+        </div>
+        <div class="mt-4 text-sm text-gray-500">
+          <p>Detta är den underliggande Mermaid-koden som genererar flödesdiagrammet. Du kan använda denna kod i andra Mermaid-verktyg.</p>
+        </div>
+      </div>
+    <% } %>
   </div>
 
+  <!-- Ladda externa scripts -->
+  <script src="assets/js/form-dependencies.js"></script>
+  <script src="assets/js/form-summary.js"></script>
+  <script src="assets/js/form-pdf.js"></script>
+  <script src="assets/js/tabs.js"></script>
+  <script src="assets/js/main.js"></script>
+
   <script>
+    // Initiera Mermaid
     document.addEventListener('DOMContentLoaded', function() {
-      // Hitta alla sektioner, frågor och svar
-      const form = document.getElementById('processForm');
-      const summarizeBtn = document.getElementById('summarizeBtn');
-      const summaryDiv = document.getElementById('summary');
-      const summaryContent = document.getElementById('summaryContent');
-      const downloadPDFBtn = document.getElementById('downloadPDF');
-
-      // När användaren klickar på "Sammanfatta"
-      summarizeBtn.addEventListener('click', function() {
-        // Samla ihop valda alternativ
-        const selectedAnswers = [];
-        const radioInputs = form.querySelectorAll('input[type="radio"]:checked');
-        const checkboxInputs = form.querySelectorAll('input[type="checkbox"]:checked');
-        const textareas = form.querySelectorAll('textarea');
-
-        // Funktion för att extrahera information
-        function extractAnswerInfo(input) {
-          const questionContainer = input.closest('.question-container');
-          if (!questionContainer) return null;
-
-          const questionText = questionContainer.querySelector('h3').textContent;
-
-          // Om det är en textarea
-          if (input.tagName === 'TEXTAREA') {
-            const answerText = input.value.trim();
-            if (!answerText) return null;
-
-            return {
-              question: questionText,
-              answer: answerText,
-              recommendation: null
-            };
-          }
-
-          // Om det är en checkbox eller radioknapp
-          const label = input.nextElementSibling;
-          if (!label) return null;
-
-          // Hämta svarstext (allt före eventuell rekommendation i parentes)
-          let answerText = label.textContent.trim();
-          const spanElement = label.querySelector('span');
-          if (spanElement) {
-            answerText = answerText.replace(spanElement.textContent, '').trim();
-          }
-
-          // Hämta rekommendation om den finns
-          const recommendationElement = label.querySelector('span');
-          let recommendationText = null;
-          if (recommendationElement) {
-            recommendationText = recommendationElement.textContent.replace(/\(→\s*|\)/g, '').trim();
-          }
-
-          return {
-            question: questionText,
-            answer: answerText,
-            recommendation: recommendationText
-          };
-        }
-
-        // Samla radioknappar
-        radioInputs.forEach(input => {
-          const info = extractAnswerInfo(input);
-          if (info) selectedAnswers.push(info);
-        });
-
-        // Samla checkboxar
-        checkboxInputs.forEach(input => {
-          const info = extractAnswerInfo(input);
-          if (info) selectedAnswers.push(info);
-        });
-
-        // Samla textareas med innehåll
-        textareas.forEach(textarea => {
-          if (textarea.value.trim()) {
-            const info = extractAnswerInfo(textarea);
-            if (info) selectedAnswers.push(info);
-          }
-        });
-
-        // Visa sammanfattningen
-        summaryContent.innerHTML = '';
-
-        if (selectedAnswers.length === 0) {
-          summaryContent.innerHTML = '<p class="text-red-600">Inga val har gjorts. Vänligen välj alternativ i formuläret.</p>';
-        } else {
-          // Gruppera efter fråga
-          const groupedAnswers = {};
-          selectedAnswers.forEach(item => {
-            if (!groupedAnswers[item.question]) {
-              groupedAnswers[item.question] = [];
-            }
-            groupedAnswers[item.question].push(item);
-          });
-
-          // Skapa HTML
-          Object.keys(groupedAnswers).forEach(question => {
-            const answersHtml = groupedAnswers[question]
-              .map(item => {
-                let html = `<li class="mb-2">${item.answer}`;
-                if (item.recommendation) {
-                  html += `<div class="text-green-700 ml-4 mt-1">${item.recommendation}</div>`;
-                }
-                html += '</li>';
-                return html;
-              })
-              .join('');
-
-            summaryContent.innerHTML += `
-              <div class="mb-6">
-                <h3 class="font-semibold text-lg mb-2">${question}</h3>
-                <ul class="list-disc pl-6">
-                  ${answersHtml}
-                </ul>
-              </div>
-            `;
-          });
-        }
-
-        // Visa sammanfattningsdelen
-        summaryDiv.classList.remove('hidden');
-
-        // Scrolla till sammanfattningen
-        summaryDiv.scrollIntoView({ behavior: 'smooth' });
+      // Konfigurera och initiera Mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: 'loose',
+        theme: 'default',
+        flowchart: {
+          htmlLabels: true,
+          curve: 'basis',
+          // Lägg till dessa parametrar för radbrytning
+          nodeSpacing: 50,
+          rankSpacing: 80,
+          wrap: true,
+          width: 50  // Begränsar nodernas bredd vilket tvingar radbrytning
+        },
+        logLevel: 'error'
       });
 
-      // När användaren klickar på "Ladda ner PDF"
-      downloadPDFBtn.addEventListener('click', function() {
-        // Se till att jsPDF är laddat
-        if (typeof window.jspdf === 'undefined') {
-          alert('PDF-biblioteket kunde inte laddas. Försök igen senare.');
-          return;
+      // Forced render för att säkerställa att diagrammet visas
+      setTimeout(function() {
+        try {
+          mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+          console.log('Mermaid diagram initialized');
+        } catch (e) {
+          console.error('Error initializing Mermaid diagram:', e);
         }
-
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        // Titel
-        doc.setFontSize(18);
-        doc.text("Sammanfattning av process", 20, 20);
-
-        // Innehåll
-        doc.setFontSize(12);
-        let yPos = 40;
-
-        // Hämta sektioner från sammanfattningen
-        const sections = summaryContent.querySelectorAll('div.mb-6');
-
-        sections.forEach(section => {
-          const title = section.querySelector('h3').textContent;
-          doc.setFont(undefined, 'bold');
-          doc.text(title, 20, yPos);
-          doc.setFont(undefined, 'normal');
-          yPos += 10;
-
-          // Hämta svar
-          const items = section.querySelectorAll('li');
-          items.forEach(item => {
-            // Svarstext
-            const answerText = item.childNodes[0].textContent;
-            doc.text("• " + answerText, 25, yPos);
-            yPos += 7;
-
-            // Eventuell rekommendation
-            const recommendation = item.querySelector('div');
-            if (recommendation) {
-              doc.setTextColor(0, 100, 0); // Grön text för rekommendationer
-              doc.text("  → " + recommendation.textContent, 30, yPos);
-              doc.setTextColor(0, 0, 0); // Återställ textfärg
-              yPos += 7;
-            }
-
-            // Kontrollera om vi behöver ny sida
-            if (yPos > 270) {
-              doc.addPage();
-              yPos = 20;
-            }
-          });
-
-          yPos += 10;
-        });
-
-        // Spara PDF
-        doc.save('process-sammanfattning.pdf');
-      });
+      }, 100);
     });
   </script>
 </body>

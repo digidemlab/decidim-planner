@@ -6,6 +6,10 @@
     "build": "node generator/index.js"
   },
   "dependencies": {
-    "ejs": "^3.1.6"
-  }
+    "ejs": "^3.1.10"
+  },
+  "description": "Detta repo genererar automatiskt ett interaktivt formulär från en Mermaid-diagramfil (`form-definition.mmd`) och publicerar resultatet med GitHub Pages.",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
