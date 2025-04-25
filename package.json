@@ -1,9 +1,0 @@
-{
-  "name": "mermaid-to-form",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "node generator/index.js"
-  },
-  "dependencies": {}
-}
