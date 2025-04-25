@@ -1,5 +1,41 @@
 graph LR
-    Q1[1. Vill du delta?]
-    Q1 -->|Ja| Q2[2. Välj din roll]
-    Q2 -->|Användare| Q3[3. Fyll i formulär]
-    Q2 -->|Admin| Q4[4. Hantera inställningar]
+
+	A[**1 Typ av process**] --> B{Har processen tidsbestämda steg?}
+  B -->|Ja| C[Skapa en Process]
+  C --> K[Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande]
+  B -->|Nej| D[Skapa ett Samråd]
+  D --> GA[Lägg eventuellt till presentationer av officiella deltagare]
+  GA --> L[Lägg till Komponenter]
+  K --> L[Lägg till Komponenter]
+
+  M[**2 Deltagare**] --> E{Vilka ska kunna delta?}
+  E -->|Alla| G[Gå vidare]
+  E -->|Inbjudna| H[Ställ in som Privat] --> F{Vilka ska kunna se processen?}
+  F -->|Alla| I[Ställ in som Transparent]
+  F -->|Inbjudna| J[Gå vidare]
+
+  N[**3 Förslag**]
+  N --> O{Ska förslag leda till beslut?}
+  O -->|Nej, bara diskussion| P[Lägg till komponenten Debatt för att kunna sammanfatta diskussioner. Eller använd förslagskomponenten med kommentarer aktiverade.]
+  O -->|Ja| Q[Lägg till komponenten Förslag] --> R{Hur skapas förslag?}
+  Q --> QA{Är förslagen knutna till geografiska platser?}
+	QA -->|Ja| QB[Aktivera Visning på karta]
+  R -.->|Deltagare skapar egna förslag| S[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
+  R -.->|Administratör lägger till förslag| T[Aktivera officiella förslag]
+  R -.->|Deltagare diskuterar fram en längre text mening för mening | U[Aktivera kollaborativa texter]
+  R -.->|Deltagare skapar utkast till förslag som andra deltagare kan begära tillgång till för att göra justeringar | V[Aktivera gemensamma utkast]
+	R -.->|Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren | W[Aktivera ändringsförslag]
+  R -.->|Förslagen tas fram på möten | WA[Koppla förslagen till möten i möteskomponenten]
+
+  X[**4 Beslut** ] --> Y{Hur fattas beslut?}
+  Y --> |Deltagare röstar. Förslag som fått röster upp till en viss gräns går vidare| Z[Aktivera Röster under aktuellt steg för Förslag. Ställ in Minst antal stöd per förslag som gräns och Antal röster per deltagare]
+  Y --> |Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad| BB[Lägg till komponenten Budget. När Förslagsinlämningen är klar importerar du förslag från Förslagskomponenten till Budgetkomponenten.]
+  BB --> BC{Hur väljer deltagarna förslag?}
+  BC --> |Ett visst antal förslag| BD[Test]
+  BC --> |Upp till en viss summa| BE[Test]
+  Y --> |Processen är rådgivande men det ska synas vilka förslag som är populärast| CB[Aktivera gilla-markeringar för aktuellt steg. Eller aktivera Röster under aktuellt steg och sätt Minst antal stöd per förslag till 0 för att inte ha någon specifik gräns för antal röster]
+
+  DB[**5 Möten**] --> HB[Lägg till komponenten Möten]
+  HB --> EB{Är mötena fysiska eller digitala?}
+  HB --> FB{Behöver deltagare anmäla sig?}
+  HB --> GB{Finns det en dagordning?}
