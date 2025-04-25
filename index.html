@@ -1,393 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulär från Mermaid</title>
+  <title>Processskapare</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body class="p-4">
-  <h1 class="text-2xl font-bold mb-4">Auto-genererat formulär</h1>
+<body class="p-6 bg-gray-50">
+  <div class="max-w-4xl mx-auto bg-white p-8 shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold mb-8 text-center text-blue-800">Processskapare</h1>
 
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Har processen tidsbestämda steg?</h2>
-      <form id="dynamicForm-B" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Vilka ska kunna delta?</h2>
-      <form id="dynamicForm-E" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Vilka ska kunna se processen?</h2>
-      <form id="dynamicForm-F" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Ska förslag leda till beslut?</h2>
-      <form id="dynamicForm-O" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Hur skapas förslag?</h2>
-      <form id="dynamicForm-R" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Är förslagen knutna till geografiska platser?</h2>
-      <form id="dynamicForm-QA" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Hur fattas beslut?</h2>
-      <form id="dynamicForm-Y" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Hur väljer deltagarna förslag?</h2>
-      <form id="dynamicForm-BC" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Är mötena fysiska eller digitala?</h2>
-      <form id="dynamicForm-EB" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Behöver deltagare anmäla sig?</h2>
-      <form id="dynamicForm-FB" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
-    <section class="mb-6">
-      <h2 class="text-xl font-semibold mb-2">Finns det en dagordning?</h2>
-      <form id="dynamicForm-GB" class="space-y-4">
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </form>
-    </section>
-  
+    <form id="processForm" class="space-y-12">
+      
+        <div class="section border-t-2 pt-6" id="section-A">
+          <h2 class="text-2xl font-semibold mb-6">1 Typ av process</h2>
 
-  
-    <section class="mt-6">
-      <h2 class="text-xl font-semibold mb-2">Sammanfattning av rekommendationer</h2>
-      <ul class="list-disc pl-6">
-        
-          <li>**1 Typ av process**</li>
-        
-          <li>Skapa en Process</li>
-        
-          <li>Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande</li>
-        
-          <li>Skapa ett Samråd</li>
-        
-          <li>Lägg eventuellt till presentationer av officiella deltagare</li>
-        
-          <li>Lägg till Komponenter</li>
-        
-          <li>Lägg till Komponenter</li>
-        
-          <li>**2 Deltagare**</li>
-        
-          <li>Gå vidare</li>
-        
-          <li>Ställ in som Privat</li>
-        
-          <li>Ställ in som Transparent</li>
-        
-          <li>Gå vidare</li>
-        
-          <li>**3 Förslag**</li>
-        
-          <li>Lägg till komponenten Debatt för att kunna sammanfatta diskussioner. Eller använd förslagskomponenten med kommentarer aktiverade.</li>
-        
-          <li>Lägg till komponenten Förslag</li>
-        
-          <li>Aktivera Visning på karta</li>
-        
-          <li>Aktivera Deltagare skapar förslag under aktuellt steg i processen</li>
-        
-          <li>Aktivera officiella förslag</li>
-        
-          <li>Aktivera kollaborativa texter</li>
-        
-          <li>Aktivera gemensamma utkast</li>
-        
-          <li>Aktivera ändringsförslag</li>
-        
-          <li>Koppla förslagen till möten i möteskomponenten</li>
-        
-          <li>**4 Beslut**</li>
-        
-          <li>Aktivera Röster under aktuellt steg för Förslag. Ställ in Minst antal stöd per förslag som gräns och Antal röster per deltagare</li>
-        
-          <li>Lägg till komponenten Budget. När Förslagsinlämningen är klar importerar du förslag från Förslagskomponenten till Budgetkomponenten.</li>
-        
-          <li>Test</li>
-        
-          <li>Test</li>
-        
-          <li>Aktivera gilla-markeringar för aktuellt steg. Eller aktivera Röster under aktuellt steg och sätt Minst antal stöd per förslag till 0 för att inte ha någon specifik gräns för antal röster</li>
-        
-          <li>**5 Möten**</li>
-        
-      </ul>
-    </section>
-  
+          
 
-  <!-- PDF-genereringsknapp -->
-  <button id="downloadPDF" class="mt-4 px-4 py-2 bg-green-500 text-white rounded">Ladda ner PDF</button>
+          
+        </div>
+      
+        <div class="section border-t-2 pt-6" id="section-M">
+          <h2 class="text-2xl font-semibold mb-6">2 Deltagare</h2>
+
+          
+
+          
+        </div>
+      
+        <div class="section border-t-2 pt-6" id="section-N">
+          <h2 class="text-2xl font-semibold mb-6">3 Förslag</h2>
+
+          
+
+          
+        </div>
+      
+        <div class="section border-t-2 pt-6" id="section-DB">
+          <h2 class="text-2xl font-semibold mb-6">5 Möten</h2>
+
+          
+
+          
+        </div>
+      
+
+      <div class="pt-8 border-t-2">
+        <button type="button" id="summarizeBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
+          Sammanfatta dina val
+        </button>
+      </div>
+    </form>
+
+    <div id="summary" class="mt-8 hidden pt-8 border-t-2">
+      <h2 class="text-2xl font-semibold mb-6">Sammanfattning av dina val</h2>
+      <div id="summaryContent" class="bg-gray-50 p-6 rounded-lg">
+        <!-- Innehåll genereras dynamiskt -->
+      </div>
+
+      <button id="downloadPDF" class="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
+        Ladda ner PDF
+      </button>
+    </div>
+  </div>
 
   <script>
-    document.getElementById('downloadPDF').addEventListener('click', function() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const recommendations = document.querySelectorAll('section ul li');
-      doc.text("Sammanfattning av rekommendationer:", 10, 10);
-      recommendations.forEach(function(li, index) {
-        doc.text(`${index + 1}. ${li.textContent}`, 10, 20 + (index * 10));
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hitta alla sektioner, frågor och svar
+      const form = document.getElementById('processForm');
+      const summarizeBtn = document.getElementById('summarizeBtn');
+      const summaryDiv = document.getElementById('summary');
+      const summaryContent = document.getElementById('summaryContent');
+      const downloadPDFBtn = document.getElementById('downloadPDF');
+
+      // När användaren klickar på "Sammanfatta"
+      summarizeBtn.addEventListener('click', function() {
+        // Samla ihop valda alternativ
+        const selectedAnswers = [];
+        const radioInputs = form.querySelectorAll('input[type="radio"]:checked');
+        const checkboxInputs = form.querySelectorAll('input[type="checkbox"]:checked');
+
+        // Samla radioknappar
+        radioInputs.forEach(input => {
+          const questionText = input.closest('.question-container').querySelector('h3').textContent;
+          const answerText = input.parentElement.querySelector('label').textContent.split('(→')[0].trim();
+          const recommendationText = input.parentElement.querySelector('label span')?.textContent.replace('(→', '').replace(')', '').trim();
+
+          selectedAnswers.push({
+            question: questionText,
+            answer: answerText,
+            recommendation: recommendationText
+          });
+        });
+
+        // Samla checkboxar
+        checkboxInputs.forEach(input => {
+          const questionText = input.closest('.question-container').querySelector('h3').textContent;
+          const answerText = input.parentElement.querySelector('label').textContent.split('(→')[0].trim();
+          const recommendationText = input.parentElement.querySelector('label span')?.textContent.replace('(→', '').replace(')', '').trim();
+
+          selectedAnswers.push({
+            question: questionText,
+            answer: answerText,
+            recommendation: recommendationText
+          });
+        });
+
+        // Visa sammanfattningen
+        summaryContent.innerHTML = '';
+
+        if (selectedAnswers.length === 0) {
+          summaryContent.innerHTML = '<p class="text-red-600">Inga val har gjorts. Vänligen välj alternativ i formuläret.</p>';
+        } else {
+          // Gruppera efter fråga
+          const groupedAnswers = {};
+          selectedAnswers.forEach(item => {
+            if (!groupedAnswers[item.question]) {
+              groupedAnswers[item.question] = [];
+            }
+            groupedAnswers[item.question].push(item);
+          });
+
+          // Skapa HTML
+          Object.keys(groupedAnswers).forEach(question => {
+            const answersHtml = groupedAnswers[question]
+              .map(item => {
+                let html = `<li class="mb-2">${item.answer}`;
+                if (item.recommendation) {
+                  html += `<div class="text-green-700 ml-4 mt-1">${item.recommendation}</div>`;
+                }
+                html += '</li>';
+                return html;
+              })
+              .join('');
+
+            summaryContent.innerHTML += `
+              <div class="mb-6">
+                <h3 class="font-semibold text-lg mb-2">${question}</h3>
+                <ul class="list-disc pl-6">
+                  ${answersHtml}
+                </ul>
+              </div>
+            `;
+          });
+        }
+
+        // Visa sammanfattningsdelen
+        summaryDiv.classList.remove('hidden');
+
+        // Scrolla till sammanfattningen
+        summaryDiv.scrollIntoView({ behavior: 'smooth' });
       });
-      doc.save('sammanfattning.pdf');
+
+      // När användaren klickar på "Ladda ner PDF"
+      downloadPDFBtn.addEventListener('click', function() {
+        // Se till att jsPDF är laddat
+        if (typeof window.jspdf === 'undefined') {
+          alert('PDF-biblioteket kunde inte laddas. Försök igen senare.');
+          return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Titel
+        doc.setFontSize(18);
+        doc.text("Sammanfattning av process", 20, 20);
+
+        // Innehåll
+        doc.setFontSize(12);
+        let yPos = 40;
+
+        // Hämta sektioner från sammanfattningen
+        const sections = summaryContent.querySelectorAll('div.mb-6');
+
+        sections.forEach(section => {
+          const title = section.querySelector('h3').textContent;
+          doc.setFont(undefined, 'bold');
+          doc.text(title, 20, yPos);
+          doc.setFont(undefined, 'normal');
+          yPos += 10;
+
+          // Hämta svar
+          const items = section.querySelectorAll('li');
+          items.forEach(item => {
+            // Svarstext
+            const answerText = item.childNodes[0].textContent;
+            doc.text("• " + answerText, 25, yPos);
+            yPos += 7;
+
+            // Eventuell rekommendation
+            const recommendation = item.querySelector('div');
+            if (recommendation) {
+              doc.setTextColor(0, 100, 0); // Grön text för rekommendationer
+              doc.text("  → " + recommendation.textContent, 30, yPos);
+              doc.setTextColor(0, 0, 0); // Återställ textfärg
+              yPos += 7;
+            }
+
+            // Kontrollera om vi behöver ny sida
+            if (yPos > 270) {
+              doc.addPage();
+              yPos = 20;
+            }
+          });
+
+          yPos += 10;
+        });
+
+        // Spara PDF
+        doc.save('process-sammanfattning.pdf');
+      });
     });
   </script>
 </body>
