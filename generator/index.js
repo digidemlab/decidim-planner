@@ -7,7 +7,7 @@ const template = fs.readFileSync('./templates/form-template.ejs', 'utf-8');
 
 function parseNodes(mermaid) {
   const lines = mermaid.split('\n');
-  const nodes = new Set();
+  const nodes = [];
   const edges = [];
   const recommendations = [];
 
@@ -15,7 +15,7 @@ function parseNodes(mermaid) {
     const questionMatch = line.match(/(\w+)\s*\{(.*?)\}/);
     if (questionMatch) {
       const [, node, question] = questionMatch;
-      nodes.add({ node, question: question.trim() });
+      nodes.push({ node, question: question.trim() });
     }
 
     const answerMatch = line.match(/(\w+)\s*\|\|(.*?)\|\|/);
@@ -27,7 +27,7 @@ function parseNodes(mermaid) {
     const recommendationMatch = line.match(/(\w+)\s*\[(.*?)\]/);
     if (recommendationMatch) {
       const [, node, recommendation] = recommendationMatch;
-      recommendations.push({ node, recommendation: recommendation.trim() });
+      recommendations.push(recommendation.trim());
     }
 
     const singleChoiceMatch = line.match(/(\w+)\s*-->\s*(\w+)/);
@@ -43,7 +43,7 @@ function parseNodes(mermaid) {
     }
   });
 
-  return { edges, nodes: Array.from(nodes), recommendations };
+  return { edges, nodes, recommendations };
 }
 
 function generateForm({ edges, nodes, recommendations }) {
