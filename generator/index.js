@@ -55,7 +55,6 @@ function generateForm({ edges, nodes, recommendations }) {
   <meta charset="utf-8">
   <title>Formulär från Mermaid</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="p-4">
   <h1 class="text-2xl font-bold mb-4">Auto-genererat formulär</h1>
