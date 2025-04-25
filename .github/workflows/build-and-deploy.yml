@@ -23,5 +23,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: main    # Korrekt parameter för att publicera till main
-          publish_dir: ./public
+          publish_branch: gh-pages  # Skickar till gh-pages
+          publish_dir: ./public    # Mappen som innehåller genererad HTML
