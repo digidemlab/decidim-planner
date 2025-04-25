@@ -17,11 +17,11 @@ jobs:
           node-version: '18'
 
       - run: npm install
-      - run: npm run build
+      - run: npm run build  # Kör index.js som skapar HTML
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages  # Skickar till gh-pages
-          publish_dir: ./public    # Mappen som innehåller genererad HTML
+          publish_branch: gh-pages
+          publish_dir: ./public    # Mappen som innehåller den genererade HTML

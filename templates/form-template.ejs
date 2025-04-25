@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulär från Mermaid</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+  <h1 class="text-2xl font-bold mb-4">Auto-genererat formulär</h1>
+
+  <% nodes.forEach(function(node) { %>
+    <section class="mb-6">
+      <h2 class="text-xl font-semibold mb-2"><%= node.question %></h2>
+      <form id="dynamicForm-<%= node.node %>" class="space-y-4">
+        <% edges.forEach(function(edge) { %>
+          <% if (edge.from === node.node) { %>
+            <div>
+              <label class="block text-lg font-semibold mb-1"><%= edge.from %> → <%= edge.to %></label>
+              <input type="<%= edge.multiple ? 'checkbox' : 'radio' %>" name="<%= edge.from %>" value="<%= edge.to %>" class="mr-2">
+              <span><%= edge.label || 'Välj alternativ' %></span>
+            </div>
+          <% } %>
+        <% }) %>
+      </form>
+    </section>
+  <% }) %>
+
+  <% if (recommendations.length > 0) { %>
+    <section class="mt-6">
+      <h2 class="text-xl font-semibold mb-2">Sammanfattning av rekommendationer</h2>
+      <ul class="list-disc pl-6">
+        <% recommendations.forEach(function(recommendation) { %>
+          <li><%= recommendation %></li>
+        <% }) %>
+      </ul>
+    </section>
+  <% } %>
+
+  <button id="downloadPDF" class="mt-4 px-4 py-2 bg-green-500 text-white rounded">Ladda ner PDF</button>
+
+  <script>
+    document.getElementById('downloadPDF').addEventListener('click', function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const recommendations = document.querySelectorAll('section ul li');
+      doc.text("Sammanfattning av rekommendationer:", 10, 10);
+      recommendations.forEach(function(li, index) {
+        doc.text(`${index + 1}. ${li.textContent}`, 10, 20 + (index * 10));
+      });
+      doc.save('sammanfattning.pdf');
+    });
+  </script>
+</body>
+</html>
