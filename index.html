@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planeringsverktyg Decidim</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js"></script>
+  <style>
+    .hidden-question {
+      display: none;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .tab-content.active div {
+      overflow: hidden;
+    }
+    .mermaid-container {
+      overflow: auto;
+      padding: 20px;
+      transition: transform 0.3s ease;
+      transform-origin: center top;
+    }
+  </style>
+</head>
+<body class="p-6 bg-gray-50">
+  <div class="max-w-5xl mx-auto bg-white p-8 shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold mb-6 text-center text-blue-800">Planeringsverktyg Decidim</h1>
+
+    <!-- Tab Navigation with Tailwind -->
+    <div class="border-b border-gray-200 mb-6">
+      <div class="flex justify-center">
+        <nav class="flex space-x-8" aria-label="Tabs">
+          <button class="tab-button px-3 py-2 border-b-2 font-medium text-sm border-blue-500 text-blue-600 active"
+                  data-tab="form-tab"
+                  aria-current="page">
+            Formulär
+          </button>
+          <button class="tab-button px-3 py-2 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  data-tab="diagram-tab">
+            Process-diagram
+          </button>
+          
+            <button class="tab-button px-3 py-2 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    data-tab="code-tab">
+              Mermaid kod
+            </button>
+          
+        </nav>
+      </div>
+    </div>
+
+    <!-- Form Tab Content -->
+    <div id="form-tab" class="tab-content active">
+      <form id="processForm" class="space-y-12">
+        
+          <div class="section border-t-2 pt-6" id="section-S1">
+            <h2 class="text-2xl font-semibold mb-6">1 Typ av process</h2>
+
+            
+              
+
+              
+                
+
+                <div class="question-container mb-8 "
+                     id="question-S1Q1"
+                     data-dependencies="[]">
+                  <h3 class="text-xl font-medium mb-4">Har processen tidsbestämda steg?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S1Q1"
+                                   id="answer-S1Q1-0"
+                                   value="S1A1"
+                                   data-question-id="S1Q1"
+                                   data-answer-text="Ja"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S1Q1-0" class="text-lg">
+                              Ja
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Skapa en Process. Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S1Q1"
+                                   id="answer-S1Q1-1"
+                                   value="S1A2"
+                                   data-question-id="S1Q1"
+                                   data-answer-text="Nej"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S1Q1-1" class="text-lg">
+                              Nej
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Skapa ett Samråd. Lägg eventuellt till presentationer av officiella deltagare.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+            
+          </div>
+        
+          <div class="section border-t-2 pt-6" id="section-S2">
+            <h2 class="text-2xl font-semibold mb-6">2 Deltagare</h2>
+
+            
+              
+
+              
+                
+
+                <div class="question-container mb-8 "
+                     id="question-S2Q1"
+                     data-dependencies="[]">
+                  <h3 class="text-xl font-medium mb-4">Vilka ska kunna delta?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S2Q1"
+                                   id="answer-S2Q1-0"
+                                   value="S2A1"
+                                   data-question-id="S2Q1"
+                                   data-answer-text="Alla"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q1-0" class="text-lg">
+                              Alla
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Gå vidare.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S2Q1"
+                                   id="answer-S2Q1-1"
+                                   value="S2A2"
+                                   data-question-id="S2Q1"
+                                   data-answer-text="Inbjudna"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q1-1" class="text-lg">
+                              Inbjudna
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Ställ in som Privat. Lägg till deltagare en och en eller importera en csv-fil med namn och e-postadresser.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S2Q1"
+                                   id="answer-S2Q1-2"
+                                   value="S2A3"
+                                   data-question-id="S2Q1"
+                                   data-answer-text="Deltagare som uppfyller vissa kriterier"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q1-2" class="text-lg">
+                              Deltagare som uppfyller vissa kriterier
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera verifiering av deltagare.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S2Q2"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S2Q1&#34;,&#34;answer&#34;:&#34;Deltagare som uppfyller vissa kriterier&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S2A3&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Hur ska deltagarna verifieras?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S2Q2"
+                                   id="answer-S2Q2-0"
+                                   value="S2A4"
+                                   data-question-id="S2Q2"
+                                   data-answer-text="Genom att ladda upp ett identitetsdokument, som godkänns av en administratör på plattformen."
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q2-0" class="text-lg">
+                              Genom att ladda upp ett identitetsdokument, som godkänns av en administratör på plattformen.
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  En systemadministratör aktiverar auktoriseringen Identitetsdokument. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S2Q2"
+                                   id="answer-S2Q2-1"
+                                   value="S2A5"
+                                   data-question-id="S2Q2"
+                                   data-answer-text="Med en kod, som kan skickas ut med brev."
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q2-1" class="text-lg">
+                              Med en kod, som kan skickas ut med brev.
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  En systemadministratör aktiverar auktoriseringen Kod via fysiskt brev. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S2Q2"
+                                   id="answer-S2Q2-2"
+                                   value="S2A6"
+                                   data-question-id="S2Q2"
+                                   data-answer-text="Mot ett medlemsregister."
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q2-2" class="text-lg">
+                              Mot ett medlemsregister.
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  En systemadministratör aktiverar auktoriseringen Organisationens medlemslista. Ladda upp medlemslista som csv-fil under Deltagare &gt; Auktoriseringar &gt; Organisationens medlemslista. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S2Q2"
+                                   id="answer-S2Q2-3"
+                                   value="S2A7"
+                                   data-question-id="S2Q2"
+                                   data-answer-text="På ett annat sätt."
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q2-3" class="text-lg">
+                              På ett annat sätt.
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Det går att utveckla egna plugins för verifiering av deltagare.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S2Q3"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S2Q1&#34;,&#34;answer&#34;:&#34;Inbjudna&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S2A2&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Vilka ska kunna se processen?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S2Q3"
+                                   id="answer-S2Q3-0"
+                                   value="S2A8"
+                                   data-question-id="S2Q3"
+                                   data-answer-text="Alla"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q3-0" class="text-lg">
+                              Alla
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Ställ in som Transparent.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S2Q3"
+                                   id="answer-S2Q3-1"
+                                   value="S2A9"
+                                   data-question-id="S2Q3"
+                                   data-answer-text="Inbjudna"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S2Q3-1" class="text-lg">
+                              Inbjudna
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Gå vidare.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+            
+          </div>
+        
+          <div class="section border-t-2 pt-6" id="section-S3">
+            <h2 class="text-2xl font-semibold mb-6">3 Förslag</h2>
+
+            
+              
+
+              
+                
+
+                <div class="question-container mb-8 "
+                     id="question-S3Q1"
+                     data-dependencies="[]">
+                  <h3 class="text-xl font-medium mb-4">Ska förslag leda till beslut?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S3Q1"
+                                   id="answer-S3Q1-0"
+                                   value="S3A1"
+                                   data-question-id="S3Q1"
+                                   data-answer-text="Nej, bara diskussion"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q1-0" class="text-lg">
+                              Nej, bara diskussion
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till komponenten Debatt för att kunna sammanfatta diskussioner. Eller använd förslagskomponenten med kommentarer aktiverade.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S3Q1"
+                                   id="answer-S3Q1-1"
+                                   value="S3A2"
+                                   data-question-id="S3Q1"
+                                   data-answer-text="Ja"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q1-1" class="text-lg">
+                              Ja
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till komponenten Förslag
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S3Q2"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S3Q1&#34;,&#34;answer&#34;:&#34;Ja&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S3A2&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Hur skapas förslag?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S3Q2"
+                                   id="answer-S3Q2-0"
+                                   value="S3A4"
+                                   data-question-id="S3Q2"
+                                   data-answer-text="Deltagare skapar egna förslag"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q2-0" class="text-lg">
+                              Deltagare skapar egna förslag
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera Deltagare skapar förslag under aktuellt steg i processen
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S3Q2"
+                                   id="answer-S3Q2-1"
+                                   value="S3A5"
+                                   data-question-id="S3Q2"
+                                   data-answer-text="Administratör lägger till förslag"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q2-1" class="text-lg">
+                              Administratör lägger till förslag
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera officiella förslag
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S3Q2"
+                                   id="answer-S3Q2-2"
+                                   value="S3A6"
+                                   data-question-id="S3Q2"
+                                   data-answer-text="Deltagare diskuterar fram en längre text mening för mening"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q2-2" class="text-lg">
+                              Deltagare diskuterar fram en längre text mening för mening
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera kollaborativa texter
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S3Q2"
+                                   id="answer-S3Q2-3"
+                                   value="S3A7"
+                                   data-question-id="S3Q2"
+                                   data-answer-text="Deltagare skapar utkast till förslag som andra deltagare kan begära tillgång till för att göra justeringar"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q2-3" class="text-lg">
+                              Deltagare skapar utkast till förslag som andra deltagare kan begära tillgång till för att göra justeringar
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera gemensamma utkast
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S3Q2"
+                                   id="answer-S3Q2-4"
+                                   value="S3A8"
+                                   data-question-id="S3Q2"
+                                   data-answer-text="Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q2-4" class="text-lg">
+                              Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera ändringsförslag
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S3Q2"
+                                   id="answer-S3Q2-5"
+                                   value="S3A9"
+                                   data-question-id="S3Q2"
+                                   data-answer-text="Förslagen tas fram på möten"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S3Q2-5" class="text-lg">
+                              Förslagen tas fram på möten
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Koppla förslagen till möten i möteskomponenten
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S3Q3"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S3Q1&#34;,&#34;answer&#34;:&#34;Ja&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S3A2&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Är förslagen knutna till geografiska platser?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Om det bara finns ett svarsalternativ, visa som kryssruta -->
+                        <div class="answer flex items-start space-x-3">
+                          <input type="checkbox"
+                                 name="question-S3Q3"
+                                 id="answer-S3Q3-0"
+                                 value="S3A3"
+                                 data-question-id="S3Q3"
+                                 data-answer-text="Ja"
+                                 class="mt-1 answer-input">
+                          <label for="answer-S3Q3-0" class="text-lg">
+                            Ja
+
+                            
+                              <span class="text-sm block mt-1 text-gray-600">
+                                Aktivera Visning på karta
+                              </span>
+                            
+                          </label>
+                        </div>
+                      
+                    </div>
+                  
+                </div>
+              
+            
+          </div>
+        
+          <div class="section border-t-2 pt-6" id="section-S4">
+            <h2 class="text-2xl font-semibold mb-6">4 Beslut</h2>
+
+            
+              
+
+              
+                
+
+                <div class="question-container mb-8 "
+                     id="question-S4Q1"
+                     data-dependencies="[]">
+                  <h3 class="text-xl font-medium mb-4">Hur fattas beslut?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S4Q1"
+                                   id="answer-S4Q1-0"
+                                   value="S4A1"
+                                   data-question-id="S4Q1"
+                                   data-answer-text="Deltagare röstar. Förslag som fått röster upp till en viss gräns går vidare"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S4Q1-0" class="text-lg">
+                              Deltagare röstar. Förslag som fått röster upp till en viss gräns går vidare
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera Röster under aktuellt steg för Förslag. Ställ in Minst antal stöd per förslag som gräns och Antal röster per deltagare
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S4Q1"
+                                   id="answer-S4Q1-1"
+                                   value="S4A2"
+                                   data-question-id="S4Q1"
+                                   data-answer-text="Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S4Q1-1" class="text-lg">
+                              Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till komponenten Budget. När Förslagsinlämningen är klar importerar du förslag från Förslagskomponenten till Budgetkomponenten.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S4Q1"
+                                   id="answer-S4Q1-2"
+                                   value="S4A5"
+                                   data-question-id="S4Q1"
+                                   data-answer-text="Processen är rådgivande men det ska synas vilka förslag som är populärast"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S4Q1-2" class="text-lg">
+                              Processen är rådgivande men det ska synas vilka förslag som är populärast
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Aktivera gilla-markeringar för aktuellt steg. Eller aktivera Röster under aktuellt steg och sätt Minst antal stöd per förslag till 0 för att inte ha någon specifik gräns för antal röster
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S4Q2"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S4Q1&#34;,&#34;answer&#34;:&#34;Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S4A2&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Hur väljer deltagarna förslag?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S4Q2"
+                                   id="answer-S4Q2-0"
+                                   value="S4A3"
+                                   data-question-id="S4Q2"
+                                   data-answer-text="Ett visst antal förslag"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S4Q2-0" class="text-lg">
+                              Ett visst antal förslag
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Ställ in Budgetkomponenten, antingen Minsta antal projekt att rösta på, eller Minsta och högsta antal projekt att rösta på
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="radio"
+                                   name="question-S4Q2"
+                                   id="answer-S4Q2-1"
+                                   value="S4A4"
+                                   data-question-id="S4Q2"
+                                   data-answer-text="Upp till en viss summa"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S4Q2-1" class="text-lg">
+                              Upp till en viss summa
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Ställ in Budgetkomponenten, Aktivera regel Lägsta procentandel av budget
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+            
+          </div>
+        
+          <div class="section border-t-2 pt-6" id="section-S5">
+            <h2 class="text-2xl font-semibold mb-6">5 Möten</h2>
+
+            
+              
+
+              
+                
+
+                <div class="question-container mb-8 "
+                     id="question-S5Q1"
+                     data-dependencies="[]">
+                  <h3 class="text-xl font-medium mb-4">Har processen några event eller möten?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Om det bara finns ett svarsalternativ, visa som kryssruta -->
+                        <div class="answer flex items-start space-x-3">
+                          <input type="checkbox"
+                                 name="question-S5Q1"
+                                 id="answer-S5Q1-0"
+                                 value="S5A1"
+                                 data-question-id="S5Q1"
+                                 data-answer-text="Ja"
+                                 class="mt-1 answer-input">
+                          <label for="answer-S5Q1-0" class="text-lg">
+                            Ja
+
+                            
+                              <span class="text-sm block mt-1 text-gray-600">
+                                Lägg till komponenten Möten
+                              </span>
+                            
+                          </label>
+                        </div>
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S5Q2"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S5Q1&#34;,&#34;answer&#34;:&#34;Ja&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S5A1&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Är mötena fysiska eller digitala eller olika för olika möten?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S5Q2"
+                                   id="answer-S5Q2-0"
+                                   value="S5A2"
+                                   data-question-id="S5Q2"
+                                   data-answer-text="Fysiska"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S5Q2-0" class="text-lg">
+                              Fysiska
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till möte och ställ in Fysiskt. Lägg till adress och vägbeskrivning.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S5Q2"
+                                   id="answer-S5Q2-1"
+                                   value="S5A3"
+                                   data-question-id="S5Q2"
+                                   data-answer-text="Digitala"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S5Q2-1" class="text-lg">
+                              Digitala
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till möte och ställ in Digitalt. Lägg till länk till videomöte.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S5Q2"
+                                   id="answer-S5Q2-2"
+                                   value="S5A4"
+                                   data-question-id="S5Q2"
+                                   data-answer-text="Hybridmöten"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S5Q2-2" class="text-lg">
+                              Hybridmöten
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till möte och ställ in Hybridmöte. Lägg till adress och vägbeskrivning. Lägg till länk till videomöte.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S5Q3"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S5Q1&#34;,&#34;answer&#34;:&#34;Ja&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S5A1&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Behöver deltagare anmäla sig?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Om det bara finns ett svarsalternativ, visa som kryssruta -->
+                        <div class="answer flex items-start space-x-3">
+                          <input type="checkbox"
+                                 name="question-S5Q3"
+                                 id="answer-S5Q3-0"
+                                 value="S5A5"
+                                 data-question-id="S5Q3"
+                                 data-answer-text="Ja"
+                                 class="mt-1 answer-input">
+                          <label for="answer-S5Q3-0" class="text-lg">
+                            Ja
+
+                            
+                              <span class="text-sm block mt-1 text-gray-600">
+                                I mötets inställningar, välj På den här plattformen under Typ av registrering. I översikten över möten, klicka ikonen för Registreringar och ställ in antal platser och villkor för registrering.
+                              </span>
+                            
+                          </label>
+                        </div>
+                      
+                    </div>
+                  
+                </div>
+              
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S5Q4"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S5Q1&#34;,&#34;answer&#34;:&#34;Ja&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S5A1&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Finns det en dagordning?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Om det bara finns ett svarsalternativ, visa som kryssruta -->
+                        <div class="answer flex items-start space-x-3">
+                          <input type="checkbox"
+                                 name="question-S5Q4"
+                                 id="answer-S5Q4-0"
+                                 value="S5A6"
+                                 data-question-id="S5Q4"
+                                 data-answer-text="Ja"
+                                 class="mt-1 answer-input">
+                          <label for="answer-S5Q4-0" class="text-lg">
+                            Ja
+
+                            
+                              <span class="text-sm block mt-1 text-gray-600">
+                                I översikten över möten, klicka ikonen för Dagordning och lägg till tid och beskrivning för olika punkter.
+                              </span>
+                            
+                          </label>
+                        </div>
+                      
+                    </div>
+                  
+                </div>
+              
+            
+          </div>
+        
+          <div class="section border-t-2 pt-6" id="section-S6">
+            <h2 class="text-2xl font-semibold mb-6">6 Uppföljning</h2>
+
+            
+              
+
+              
+                
+
+                <div class="question-container mb-8 "
+                     id="question-S6Q1"
+                     data-dependencies="[]">
+                  <h3 class="text-xl font-medium mb-4">Hur följs besluten eller förslagen upp?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Flera svarsalternativ -->
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S6Q1"
+                                   id="answer-S6Q1-0"
+                                   value="S6A1"
+                                   data-question-id="S6Q1"
+                                   data-answer-text="Utvärderingsformulär till deltagare"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S6Q1-0" class="text-lg">
+                              Utvärderingsformulär till deltagare
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till komponenten Enkät och ställ in utvärderingsfrågor.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S6Q1"
+                                   id="answer-S6Q1-1"
+                                   value="S6A2"
+                                   data-question-id="S6Q1"
+                                   data-answer-text="Utskick till deltagare"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S6Q1-1" class="text-lg">
+                              Utskick till deltagare
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Använd Nyhetsbrevsfunktionen för att göra utskick till de som deltagit i eller följer processen.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                          <div class="answer flex items-start space-x-3">
+                            <input type="checkbox"
+                                   name="question-S6Q1"
+                                   id="answer-S6Q1-2"
+                                   value="S6A3"
+                                   data-question-id="S6Q1"
+                                   data-answer-text="Genomförandet av förslag dokumenteras på plattformen"
+                                   class="mt-1 answer-input">
+                            <label for="answer-S6Q1-2" class="text-lg">
+                              Genomförandet av förslag dokumenteras på plattformen
+
+                              
+                                <span class="text-sm block mt-1 text-gray-600">
+                                  Lägg till komponenten Genomförande. Ställ in status för genomförande. Importera förslag från Budget- eller Förslags-komponentent. Lägg in uppdateringar av hur genomförandet går.
+                                </span>
+                              
+                            </label>
+                          </div>
+                        
+                      
+                    </div>
+                  
+                </div>
+              
+            
+          </div>
+        
+
+        <div class="pt-8 border-t-2">
+          <button type="button" id="summarizeBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
+            Sammanfatta dina val
+          </button>
+        </div>
+      </form>
+
+      <div id="summary" class="mt-8 hidden pt-8 border-t-2">
+        <h2 class="text-2xl font-semibold mb-6">Sammanfattning av dina val</h2>
+        <div id="summaryContent" class="bg-gray-50 p-6 rounded-lg">
+          <!-- Innehåll genereras dynamiskt -->
+        </div>
+
+        <button id="downloadPDF" class="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition-colors">
+          Ladda ner PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Diagram Tab Content -->
+    <div id="diagram-tab" class="tab-content">
+      <div class="bg-gray-50 p-4 rounded-lg mb-4">
+        <div id="diagram-container" class="overflow-auto p-4">
+          <!-- Här kommer diagrammet att renderas -->
+          <div id="mermaid-output" class="text-center"></div>
+        </div>
+      </div>
+      <div class="my-6 text-center">
+        <button id="render-mermaid-btn" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition-colors">
+          Rendera diagram
+        </button>
+
+        <div class="mt-4">
+          <button id="zoom-in" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Zooma in
+          </button>
+          <button id="zoom-out" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+            </svg>
+            Zooma ut
+          </button>
+          <button id="reset-zoom" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+            </svg>
+            Återställ zoom
+          </button>
+        </div>
+      </div>
+
+      <!-- Dold container för diagramkoden (används för mermaid.render) -->
+      <div id="mermaid-code" style="display: none;">---
+title: Planeringsverktyg Decidim
+---
+
+graph LR
+    %% Sektion 1: Typ av process
+    S1[**1 Typ av process**]
+    S1 --&gt; S1Q1{Har processen tidsbestämda steg?}
+    S1Q1 --&gt;|Ja| S1A1[Skapa en Process. Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande.]
+    S1Q1 --&gt;|Nej| S1A2[Skapa ett Samråd. Lägg eventuellt till presentationer av officiella deltagare.]
+
+    %% Sektion 2: Deltagare
+    S2[**2 Deltagare**]
+    S2 --&gt; S2Q1{Vilka ska kunna delta?}
+    S2Q1 --&gt;|Alla| S2A1[Gå vidare.]
+    S2Q1 --&gt;|Inbjudna| S2A2[Ställ in som Privat. Lägg till deltagare en och en eller importera en csv-fil med namn och e-postadresser.]
+    S2Q1 --&gt;|Deltagare som uppfyller vissa kriterier| S2A3[Aktivera verifiering av deltagare.]
+    S2A3 --&gt; S2Q2{Hur ska deltagarna verifieras?}
+    S2Q2 -.-&gt;|Genom att ladda upp ett identitetsdokument, som godkänns av en administratör på plattformen.| S2A4[En systemadministratör aktiverar auktoriseringen Identitetsdokument. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.]
+    S2Q2 -.-&gt;|Med en kod, som kan skickas ut med brev.| S2A5[En systemadministratör aktiverar auktoriseringen Kod via fysiskt brev. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.]
+    S2Q2 -.-&gt;|Mot ett medlemsregister.| S2A6[En systemadministratör aktiverar auktoriseringen Organisationens medlemslista. Ladda upp medlemslista som csv-fil under Deltagare &gt; Auktoriseringar &gt; Organisationens medlemslista. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.]
+    S2Q2 -.-&gt;|På ett annat sätt.| S2A7[Det går att utveckla egna plugins för verifiering av deltagare.]
+    S2A2 --&gt; S2Q3{Vilka ska kunna se processen?}
+    S2Q3 --&gt;|Alla| S2A8[Ställ in som Transparent.]
+    S2Q3 --&gt;|Inbjudna| S2A9[Gå vidare.]
+
+    %% Sektion 3: Förslag
+    S3[**3 Förslag**]
+    S3 --&gt; S3Q1{Ska förslag leda till beslut?}
+    S3Q1 --&gt;|Nej, bara diskussion| S3A1[Lägg till komponenten Debatt för att kunna sammanfatta diskussioner. Eller använd förslagskomponenten med kommentarer aktiverade.]
+    S3Q1 --&gt;|Ja| S3A2[Lägg till komponenten Förslag]
+    S3A2 --&gt; S3Q2{Hur skapas förslag?}
+    S3A2 --&gt; S3Q3{Är förslagen knutna till geografiska platser?}
+    S3Q3 --&gt;|Ja| S3A3[Aktivera Visning på karta]
+    S3Q2 -.-&gt;|Deltagare skapar egna förslag| S3A4[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
+    S3Q2 -.-&gt;|Administratör lägger till förslag| S3A5[Aktivera officiella förslag]
+    S3Q2 -.-&gt;|Deltagare diskuterar fram en längre text mening för mening| S3A6[Aktivera kollaborativa texter]
+    S3Q2 -.-&gt;|Deltagare skapar utkast till förslag som andra deltagare kan begära tillgång till för att göra justeringar| S3A7[Aktivera gemensamma utkast]
+    S3Q2 -.-&gt;|Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren| S3A8[Aktivera ändringsförslag]
+    S3Q2 -.-&gt;|Förslagen tas fram på möten| S3A9[Koppla förslagen till möten i möteskomponenten]
+
+    %% Sektion 4: Beslut
+    S4[**4 Beslut**]
+    S4 --&gt; S4Q1{Hur fattas beslut?}
+    S4Q1 --&gt; |Deltagare röstar. Förslag som fått röster upp till en viss gräns går vidare| S4A1[Aktivera Röster under aktuellt steg för Förslag. Ställ in Minst antal stöd per förslag som gräns och Antal röster per deltagare]
+    S4Q1 --&gt; |Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad| S4A2[Lägg till komponenten Budget. När Förslagsinlämningen är klar importerar du förslag från Förslagskomponenten till Budgetkomponenten.]
+    S4A2 --&gt; S4Q2{Hur väljer deltagarna förslag?}
+    S4Q2 --&gt; |Ett visst antal förslag| S4A3[Ställ in Budgetkomponenten, antingen Minsta antal projekt att rösta på, eller Minsta och högsta antal projekt att rösta på]
+    S4Q2 --&gt; |Upp till en viss summa| S4A4[Ställ in Budgetkomponenten, Aktivera regel Lägsta procentandel av budget]
+    S4Q1 --&gt; |Processen är rådgivande men det ska synas vilka förslag som är populärast| S4A5[Aktivera gilla-markeringar för aktuellt steg. Eller aktivera Röster under aktuellt steg och sätt Minst antal stöd per förslag till 0 för att inte ha någon specifik gräns för antal röster]
+
+    %% Sektion 5: Möten
+    S5[**5 Möten**]
+    S5 --&gt; S5Q1{Har processen några event eller möten?}
+    S5Q1 --&gt;|Ja|S5A1[Lägg till komponenten Möten]
+    S5A1 --&gt; S5Q2{Är mötena fysiska eller digitala eller olika för olika möten?}
+    S5Q2 -.-&gt; |Fysiska| S5A2[Lägg till möte och ställ in Fysiskt. Lägg till adress och vägbeskrivning.]
+    S5Q2 -.-&gt; |Digitala| S5A3[Lägg till möte och ställ in Digitalt. Lägg till länk till videomöte.]
+    S5Q2 -.-&gt; |Hybridmöten| S5A4[Lägg till möte och ställ in Hybridmöte. Lägg till adress och vägbeskrivning. Lägg till länk till videomöte.]
+    S5A1 --&gt; S5Q3{Behöver deltagare anmäla sig?}
+    S5Q3 --&gt; |Ja| S5A5[I mötets inställningar, välj På den här plattformen under Typ av registrering. I översikten över möten, klicka ikonen för Registreringar och ställ in antal platser och villkor för registrering.]
+    S5A1 --&gt; S5Q4{Finns det en dagordning?}
+    S5Q4 --&gt; |Ja| S5A6[I översikten över möten, klicka ikonen för Dagordning och lägg till tid och beskrivning för olika punkter.]
+
+    %% Sektion 6: Uppföljning
+    S6[**6 Uppföljning**]
+    S6 --&gt; S6Q1{Hur följs besluten eller förslagen upp?}
+    S6Q1 -.-&gt;|Utvärderingsformulär till deltagare|S6A1[Lägg till komponenten Enkät och ställ in utvärderingsfrågor.]
+    S6Q1 -.-&gt;|Utskick till deltagare|S6A2[Använd Nyhetsbrevsfunktionen för att göra utskick till de som deltagit i eller följer processen.]
+    S6Q1 -.-&gt;|Genomförandet av förslag dokumenteras på plattformen|S6A3[Lägg till komponenten Genomförande. Ställ in status för genomförande. Importera förslag från Budget- eller Förslags-komponentent. Lägg in uppdateringar av hur genomförandet går.]
+</div>
+    </div>
+
+    <!-- Code Tab Content -->
+    
+      <div id="code-tab" class="tab-content">
+        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-auto">
+          <pre class="whitespace-pre-wrap"><code>---
+title: Planeringsverktyg Decidim
+---
+
+graph LR
+    %% Sektion 1: Typ av process
+    S1[**1 Typ av process**]
+    S1 --&gt; S1Q1{Har processen tidsbestämda steg?}
+    S1Q1 --&gt;|Ja| S1A1[Skapa en Process. Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande.]
+    S1Q1 --&gt;|Nej| S1A2[Skapa ett Samråd. Lägg eventuellt till presentationer av officiella deltagare.]
+
+    %% Sektion 2: Deltagare
+    S2[**2 Deltagare**]
+    S2 --&gt; S2Q1{Vilka ska kunna delta?}
+    S2Q1 --&gt;|Alla| S2A1[Gå vidare.]
+    S2Q1 --&gt;|Inbjudna| S2A2[Ställ in som Privat. Lägg till deltagare en och en eller importera en csv-fil med namn och e-postadresser.]
+    S2Q1 --&gt;|Deltagare som uppfyller vissa kriterier| S2A3[Aktivera verifiering av deltagare.]
+    S2A3 --&gt; S2Q2{Hur ska deltagarna verifieras?}
+    S2Q2 -.-&gt;|Genom att ladda upp ett identitetsdokument, som godkänns av en administratör på plattformen.| S2A4[En systemadministratör aktiverar auktoriseringen Identitetsdokument. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.]
+    S2Q2 -.-&gt;|Med en kod, som kan skickas ut med brev.| S2A5[En systemadministratör aktiverar auktoriseringen Kod via fysiskt brev. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.]
+    S2Q2 -.-&gt;|Mot ett medlemsregister.| S2A6[En systemadministratör aktiverar auktoriseringen Organisationens medlemslista. Ladda upp medlemslista som csv-fil under Deltagare &gt; Auktoriseringar &gt; Organisationens medlemslista. Ställ in för varje komponent när verifieringen ska användas, till exempel för att lämna förslag eller rösta.]
+    S2Q2 -.-&gt;|På ett annat sätt.| S2A7[Det går att utveckla egna plugins för verifiering av deltagare.]
+    S2A2 --&gt; S2Q3{Vilka ska kunna se processen?}
+    S2Q3 --&gt;|Alla| S2A8[Ställ in som Transparent.]
+    S2Q3 --&gt;|Inbjudna| S2A9[Gå vidare.]
+
+    %% Sektion 3: Förslag
+    S3[**3 Förslag**]
+    S3 --&gt; S3Q1{Ska förslag leda till beslut?}
+    S3Q1 --&gt;|Nej, bara diskussion| S3A1[Lägg till komponenten Debatt för att kunna sammanfatta diskussioner. Eller använd förslagskomponenten med kommentarer aktiverade.]
+    S3Q1 --&gt;|Ja| S3A2[Lägg till komponenten Förslag]
+    S3A2 --&gt; S3Q2{Hur skapas förslag?}
+    S3A2 --&gt; S3Q3{Är förslagen knutna till geografiska platser?}
+    S3Q3 --&gt;|Ja| S3A3[Aktivera Visning på karta]
+    S3Q2 -.-&gt;|Deltagare skapar egna förslag| S3A4[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
+    S3Q2 -.-&gt;|Administratör lägger till förslag| S3A5[Aktivera officiella förslag]
+    S3Q2 -.-&gt;|Deltagare diskuterar fram en längre text mening för mening| S3A6[Aktivera kollaborativa texter]
+    S3Q2 -.-&gt;|Deltagare skapar utkast till förslag som andra deltagare kan begära tillgång till för att göra justeringar| S3A7[Aktivera gemensamma utkast]
+    S3Q2 -.-&gt;|Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren| S3A8[Aktivera ändringsförslag]
+    S3Q2 -.-&gt;|Förslagen tas fram på möten| S3A9[Koppla förslagen till möten i möteskomponenten]
+
+    %% Sektion 4: Beslut
+    S4[**4 Beslut**]
+    S4 --&gt; S4Q1{Hur fattas beslut?}
+    S4Q1 --&gt; |Deltagare röstar. Förslag som fått röster upp till en viss gräns går vidare| S4A1[Aktivera Röster under aktuellt steg för Förslag. Ställ in Minst antal stöd per förslag som gräns och Antal röster per deltagare]
+    S4Q1 --&gt; |Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad| S4A2[Lägg till komponenten Budget. När Förslagsinlämningen är klar importerar du förslag från Förslagskomponenten till Budgetkomponenten.]
+    S4A2 --&gt; S4Q2{Hur väljer deltagarna förslag?}
+    S4Q2 --&gt; |Ett visst antal förslag| S4A3[Ställ in Budgetkomponenten, antingen Minsta antal projekt att rösta på, eller Minsta och högsta antal projekt att rösta på]
+    S4Q2 --&gt; |Upp till en viss summa| S4A4[Ställ in Budgetkomponenten, Aktivera regel Lägsta procentandel av budget]
+    S4Q1 --&gt; |Processen är rådgivande men det ska synas vilka förslag som är populärast| S4A5[Aktivera gilla-markeringar för aktuellt steg. Eller aktivera Röster under aktuellt steg och sätt Minst antal stöd per förslag till 0 för att inte ha någon specifik gräns för antal röster]
+
+    %% Sektion 5: Möten
+    S5[**5 Möten**]
+    S5 --&gt; S5Q1{Har processen några event eller möten?}
+    S5Q1 --&gt;|Ja|S5A1[Lägg till komponenten Möten]
+    S5A1 --&gt; S5Q2{Är mötena fysiska eller digitala eller olika för olika möten?}
+    S5Q2 -.-&gt; |Fysiska| S5A2[Lägg till möte och ställ in Fysiskt. Lägg till adress och vägbeskrivning.]
+    S5Q2 -.-&gt; |Digitala| S5A3[Lägg till möte och ställ in Digitalt. Lägg till länk till videomöte.]
+    S5Q2 -.-&gt; |Hybridmöten| S5A4[Lägg till möte och ställ in Hybridmöte. Lägg till adress och vägbeskrivning. Lägg till länk till videomöte.]
+    S5A1 --&gt; S5Q3{Behöver deltagare anmäla sig?}
+    S5Q3 --&gt; |Ja| S5A5[I mötets inställningar, välj På den här plattformen under Typ av registrering. I översikten över möten, klicka ikonen för Registreringar och ställ in antal platser och villkor för registrering.]
+    S5A1 --&gt; S5Q4{Finns det en dagordning?}
+    S5Q4 --&gt; |Ja| S5A6[I översikten över möten, klicka ikonen för Dagordning och lägg till tid och beskrivning för olika punkter.]
+
+    %% Sektion 6: Uppföljning
+    S6[**6 Uppföljning**]
+    S6 --&gt; S6Q1{Hur följs besluten eller förslagen upp?}
+    S6Q1 -.-&gt;|Utvärderingsformulär till deltagare|S6A1[Lägg till komponenten Enkät och ställ in utvärderingsfrågor.]
+    S6Q1 -.-&gt;|Utskick till deltagare|S6A2[Använd Nyhetsbrevsfunktionen för att göra utskick till de som deltagit i eller följer processen.]
+    S6Q1 -.-&gt;|Genomförandet av förslag dokumenteras på plattformen|S6A3[Lägg till komponenten Genomförande. Ställ in status för genomförande. Importera förslag från Budget- eller Förslags-komponentent. Lägg in uppdateringar av hur genomförandet går.]
+</code></pre>
+        </div>
+        <div class="mt-4 text-sm text-gray-500">
+          <p>Detta är den underliggande Mermaid-koden som genererar flödesdiagrammet. Du kan använda denna kod i andra Mermaid-verktyg.</p>
+        </div>
+      </div>
+    
+  </div>
+  <!-- Ersätt skriptdelen i slutet av form-template.ejs med detta: -->
+
+  <!-- Ladda externa scripts -->
+  <script src="assets/js/form-dependencies.js"></script>
+  <script src="assets/js/form-summary.js"></script>
+  <script src="assets/js/form-pdf.js"></script>
+  <script src="assets/js/tabs.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    // Ladda Mermaid-biblioteket och initiera allt när DOM är klar
+    document.addEventListener('DOMContentLoaded', function() {
+      // Konfigurera Mermaid på global nivå
+      if (window.mermaid) {
+        console.log('Mermaid library loaded successfully');
+      } else {
+        console.warn('Mermaid library not detected');
+      }
+
+      // Resten av initieringen sker i tabs.js
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Säkerställ att mermaid.js är laddat
+      if (typeof mermaid === 'undefined') {
+        console.error('Mermaid library is not loaded!');
+
+        // Försök ladda mermaid dynamiskt
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js';
+        script.onload = initMermaid;
+        document.head.appendChild(script);
+      } else {
+        initMermaid();
+      }
+
+      function initMermaid() {
+        console.log('Initializing Mermaid...');
+
+        // Konfigurera mermaid
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: 'loose',
+          theme: 'default',
+          flowchart: {
+            htmlLabels: true,
+            curve: 'basis',
+            nodeSpacing: 50,
+            rankSpacing: 80
+          }
+        });
+
+        // Hämta referens till element
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const renderBtn = document.getElementById('render-mermaid-btn');
+        const diagramTab = document.getElementById('diagram-tab');
+        const outputDiv = document.getElementById('mermaid-output');
+        const codeDiv = document.getElementById('mermaid-code');
+        const zoomContainer = document.getElementById('diagram-container');
+        let zoomLevel = 1;
+
+        // Lyssna efter flik-byten
+        tabButtons.forEach(button => {
+          button.addEventListener('click', function(event) {
+            if (event.target.getAttribute('data-tab') === 'diagram-tab') {
+              renderMermaidDiagram();
+            }
+          });
+        });
+
+        // Lyssna efter klick på rendera-knappen
+        if (renderBtn) {
+          renderBtn.addEventListener('click', renderMermaidDiagram);
+        }
+
+        // Zooma in-knapp
+        document.getElementById('zoom-in').addEventListener('click', function() {
+          zoomLevel += 0.2;
+          updateZoom();
+        });
+
+        // Zooma ut-knapp
+        document.getElementById('zoom-out').addEventListener('click', function() {
+          zoomLevel -= 0.2;
+          updateZoom();
+        });
+
+        // Återställ zoom-knapp
+        document.getElementById('reset-zoom').addEventListener('click', function() {
+          zoomLevel = 1;
+          updateZoom();
+        });
+
+        // Uppdatera zoom-nivån
+        function updateZoom() {
+          if (zoomContainer) {
+            zoomContainer.style.transform = `scale(${zoomLevel})`;
+            zoomContainer.style.transformOrigin = 'center top';
+            zoomContainer.style.transition = 'transform 0.3s ease';
+          }
+        }
+
+        // Rendera mermaid-diagrammet
+        function renderMermaidDiagram() {
+          console.log('Attempting to render Mermaid diagram...');
+
+          if (!outputDiv || !codeDiv) {
+            console.error('Required elements not found');
+            return;
+          }
+
+          // Hämta mermaid-koden
+          const code = codeDiv.textContent || codeDiv.innerText;
+
+          try {
+            // Rensa tidigare innehåll
+            outputDiv.innerHTML = '';
+
+            // Använd mermaid.render för bättre kompatibilitet
+            const uniqueId = 'mermaid-diagram-' + Date.now();
+
+            // Skapa en callback
+            mermaid.render(uniqueId, code, (svgCode) => {
+              console.log('Diagram rendered successfully!');
+              outputDiv.innerHTML = svgCode;
+            });
+          } catch (error) {
+            console.error('Failed to render Mermaid diagram:', error);
+            outputDiv.innerHTML = `
+              <div class="p-4 bg-red-100 text-red-700 rounded-md">
+                <p>Det gick inte att rendera diagrammet. Felmeddelande:</p>
+                <pre class="mt-2 p-2 bg-gray-100 text-xs overflow-auto">${error.message}</pre>
+              </div>
+            `;
+          }
+        }
+
+        // Rendera om diagram-fliken är aktiv från början
+        if (diagramTab && diagramTab.classList.contains('active')) {
+          renderMermaidDiagram();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
