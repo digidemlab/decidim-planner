@@ -3,8 +3,8 @@ title: Planeringsverktyg Decidim
 ---
 
 graph LR
-  	%% Sektion 1: Typ av process
-  	S1[**1 Typ av process**]
+    %% Sektion 1: Typ av process
+    S1[**1 Typ av process**]
     S1 --> S1Q1{Har processen tidsbestämda steg?}
     S1Q1 -->|Ja| S1A1[Skapa en Process. Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande.]
     S1Q1 -->|Nej| S1A2[Skapa ett Samråd. Lägg eventuellt till presentationer av officiella deltagare.]
@@ -31,12 +31,12 @@ graph LR
     S3Q1 -->|Ja| S3A2[Lägg till komponenten Förslag]
     S3A2 --> S3Q2{Hur skapas förslag?}
     S3A2 --> S3Q3{Är förslagen knutna till geografiska platser?}
-  	S3Q3 -->|Ja| S3A3[Aktivera Visning på karta]
+    S3Q3 -->|Ja| S3A3[Aktivera Visning på karta]
     S3Q2 -.->|Deltagare skapar egna förslag| S3A4[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
     S3Q2 -.->|Administratör lägger till förslag| S3A5[Aktivera officiella förslag]
     S3Q2 -.->|Deltagare diskuterar fram en längre text mening för mening| S3A6[Aktivera kollaborativa texter]
     S3Q2 -.->|Deltagare skapar utkast till förslag som andra deltagare kan begära tillgång till för att göra justeringar| S3A7[Aktivera gemensamma utkast]
-  	S3Q2 -.->|Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren| S3A8[Aktivera ändringsförslag]
+    S3Q2 -.->|Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren| S3A8[Aktivera ändringsförslag]
     S3Q2 -.->|Förslagen tas fram på möten| S3A9[Koppla förslagen till möten i möteskomponenten]
 
     %% Sektion 4: Beslut
