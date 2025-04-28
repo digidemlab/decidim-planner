@@ -202,34 +202,42 @@
     </div>
 
     <!-- Diagram Tab Content -->
-    <div id="diagram-tab" class="tab-content active">
+    <div id="diagram-tab" class="tab-content">
       <div class="bg-gray-50 p-4 rounded-lg mb-4">
-        <div id="diagram-container" class="mermaid-container">
-          <div class="mermaid" id="mermaid-diagram">
-            <%= parsedData.rawMermaid %>
-          </div>
+        <div id="diagram-container" class="overflow-auto p-4">
+          <!-- Här kommer diagrammet att renderas -->
+          <div id="mermaid-output" class="text-center"></div>
         </div>
       </div>
-      <div class="text-center mt-6">
-        <button id="zoom-in" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-          </svg>
-          Zooma in
+      <div class="my-6 text-center">
+        <button id="render-mermaid-btn" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition-colors">
+          Rendera diagram
         </button>
-        <button id="zoom-out" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
-          </svg>
-          Zooma ut
-        </button>
-        <button id="reset-zoom" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-          </svg>
-          Återställ zoom
-        </button>
+
+        <div class="mt-4">
+          <button id="zoom-in" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Zooma in
+          </button>
+          <button id="zoom-out" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+            </svg>
+            Zooma ut
+          </button>
+          <button id="reset-zoom" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+            </svg>
+            Återställ zoom
+          </button>
+        </div>
       </div>
+
+      <!-- Dold container för diagramkoden (används för mermaid.render) -->
+      <div id="mermaid-code" style="display: none;"><%= parsedData.rawMermaid %></div>
     </div>
 
     <!-- Code Tab Content -->
@@ -244,6 +252,7 @@
       </div>
     <% } %>
   </div>
+  <!-- Ersätt skriptdelen i slutet av form-template.ejs med detta: -->
 
   <!-- Ladda externa scripts -->
   <script src="assets/js/form-dependencies.js"></script>
@@ -253,34 +262,139 @@
   <script src="assets/js/main.js"></script>
 
   <script>
-    // Initiera Mermaid
+    // Ladda Mermaid-biblioteket och initiera allt när DOM är klar
     document.addEventListener('DOMContentLoaded', function() {
-      // Konfigurera och initiera Mermaid
-      mermaid.initialize({
-        startOnLoad: true,
-        securityLevel: 'loose',
-        theme: 'default',
-        flowchart: {
-          htmlLabels: true,
-          curve: 'basis',
-          // Lägg till dessa parametrar för radbrytning
-          nodeSpacing: 50,
-          rankSpacing: 80,
-          wrap: true,
-          width: 50  // Begränsar nodernas bredd vilket tvingar radbrytning
-        },
-        logLevel: 'error'
-      });
+      // Konfigurera Mermaid på global nivå
+      if (window.mermaid) {
+        console.log('Mermaid library loaded successfully');
+      } else {
+        console.warn('Mermaid library not detected');
+      }
 
-      // Forced render för att säkerställa att diagrammet visas
-      setTimeout(function() {
-        try {
-          mermaid.init(undefined, document.querySelectorAll('.mermaid'));
-          console.log('Mermaid diagram initialized');
-        } catch (e) {
-          console.error('Error initializing Mermaid diagram:', e);
+      // Resten av initieringen sker i tabs.js
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Säkerställ att mermaid.js är laddat
+      if (typeof mermaid === 'undefined') {
+        console.error('Mermaid library is not loaded!');
+
+        // Försök ladda mermaid dynamiskt
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js';
+        script.onload = initMermaid;
+        document.head.appendChild(script);
+      } else {
+        initMermaid();
+      }
+
+      function initMermaid() {
+        console.log('Initializing Mermaid...');
+
+        // Konfigurera mermaid
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: 'loose',
+          theme: 'default',
+          flowchart: {
+            htmlLabels: true,
+            curve: 'basis',
+            nodeSpacing: 50,
+            rankSpacing: 80
+          }
+        });
+
+        // Hämta referens till element
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const renderBtn = document.getElementById('render-mermaid-btn');
+        const diagramTab = document.getElementById('diagram-tab');
+        const outputDiv = document.getElementById('mermaid-output');
+        const codeDiv = document.getElementById('mermaid-code');
+        const zoomContainer = document.getElementById('diagram-container');
+        let zoomLevel = 1;
+
+        // Lyssna efter flik-byten
+        tabButtons.forEach(button => {
+          button.addEventListener('click', function(event) {
+            if (event.target.getAttribute('data-tab') === 'diagram-tab') {
+              renderMermaidDiagram();
+            }
+          });
+        });
+
+        // Lyssna efter klick på rendera-knappen
+        if (renderBtn) {
+          renderBtn.addEventListener('click', renderMermaidDiagram);
         }
-      }, 100);
+
+        // Zooma in-knapp
+        document.getElementById('zoom-in').addEventListener('click', function() {
+          zoomLevel += 0.2;
+          updateZoom();
+        });
+
+        // Zooma ut-knapp
+        document.getElementById('zoom-out').addEventListener('click', function() {
+          zoomLevel -= 0.2;
+          updateZoom();
+        });
+
+        // Återställ zoom-knapp
+        document.getElementById('reset-zoom').addEventListener('click', function() {
+          zoomLevel = 1;
+          updateZoom();
+        });
+
+        // Uppdatera zoom-nivån
+        function updateZoom() {
+          if (zoomContainer) {
+            zoomContainer.style.transform = `scale(${zoomLevel})`;
+            zoomContainer.style.transformOrigin = 'center top';
+            zoomContainer.style.transition = 'transform 0.3s ease';
+          }
+        }
+
+        // Rendera mermaid-diagrammet
+        function renderMermaidDiagram() {
+          console.log('Attempting to render Mermaid diagram...');
+
+          if (!outputDiv || !codeDiv) {
+            console.error('Required elements not found');
+            return;
+          }
+
+          // Hämta mermaid-koden
+          const code = codeDiv.textContent || codeDiv.innerText;
+
+          try {
+            // Rensa tidigare innehåll
+            outputDiv.innerHTML = '';
+
+            // Använd mermaid.render för bättre kompatibilitet
+            const uniqueId = 'mermaid-diagram-' + Date.now();
+
+            // Skapa en callback
+            mermaid.render(uniqueId, code, (svgCode) => {
+              console.log('Diagram rendered successfully!');
+              outputDiv.innerHTML = svgCode;
+            });
+          } catch (error) {
+            console.error('Failed to render Mermaid diagram:', error);
+            outputDiv.innerHTML = `
+              <div class="p-4 bg-red-100 text-red-700 rounded-md">
+                <p>Det gick inte att rendera diagrammet. Felmeddelande:</p>
+                <pre class="mt-2 p-2 bg-gray-100 text-xs overflow-auto">${error.message}</pre>
+              </div>
+            `;
+          }
+        }
+
+        // Rendera om diagram-fliken är aktiv från början
+        if (diagramTab && diagramTab.classList.contains('active')) {
+          renderMermaidDiagram();
+        }
+      }
     });
   </script>
 </body>

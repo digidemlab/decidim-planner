@@ -1,53 +1,90 @@
 ---
-title: Planeringsverktyg Decidim
+title: Planera din fantasiresa
 ---
 
 graph LR
-  	A[**1 Typ av process**]
-    A --> B{Har processen tidsbestämda steg?}
-    B -->|Ja| C[Skapa en Process]
-    C --> K["Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande"]
-    B -->|Nej| D[Skapa ett Samråd]
-    D --> GA[Lägg eventuellt till presentationer av officiella deltagare]
-    GA --> L[Lägg till Komponenter]
-    K --> L[Lägg till Komponenter]
+    %% Sektion 1: Resmål
+    S1[**1 Val av resmål**]
+    S1 --> S1Q1{Vilket klimat föredrar du?}
+    S1Q1 -->|Varmt och soligt| S1A1[Utforska tropiska stränder, ökenlandskap eller Medelhavsländer]
+    S1Q1 -->|Svalt och tempererat| S1A2[Överväg bergsregioner, nordliga länder eller höghöjdsplatåer]
+    S1Q1 -->|Omväxlande klimat| S1A3[Leta efter platser med vädervariationer eller planera en resa genom olika klimatzoner]
 
-    M[**2 Deltagare**]
-    M --> E{Vilka ska kunna delta?}
-    E -->|Alla| G[Gå vidare]
-    E -->|Inbjudna| H[Ställ in som Privat]
-    H --> F{Vilka ska kunna se processen?}
-    F -->|Alla| I[Ställ in som Transparent]
-    F -->|Inbjudna| J[Gå vidare]
+    S1 --> S1Q2{Vad är viktigast för din reseupplevelse?}
+    S1Q2 -->|Kultur och historia| S1A4[Prioritera historiska städer, museer och kulturella sevärdheter]
+    S1Q2 -->|Naturupplevelser| S1A5[Fokusera på nationalparker, vandringsleder och naturliga underverk]
+    S1Q2 -->|Kulinariska upplevelser| S1A6[Välj områden kända för sin matkultur, vindistrikt eller matfestivaler]
+    S1Q2 -->|Avkoppling| S1A7[Hitta lugna retreats, spa-hotell eller avskilda stränder]
 
-    N[**3 Förslag**]
-    N --> O{Ska förslag leda till beslut?}
-    O -->|Nej, bara diskussion| P[Lägg till komponenten Debatt för att kunna sammanfatta diskussioner. Eller använd förslagskomponenten med kommentarer aktiverade.]
-    O -->|Ja| Q[Lägg till komponenten Förslag]
-    Q --> R{Hur skapas förslag?}
-    Q --> QA{Är förslagen knutna till geografiska platser?}
-  	QA -->|Ja| QB[Aktivera Visning på karta]
-    R -.->|Deltagare skapar egna förslag| S[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
-    R -.->|Administratör lägger till förslag| T[Aktivera officiella förslag]
-    R -.->|Deltagare diskuterar fram en längre text mening för mening | U[Aktivera kollaborativa texter]
-    R -.->|Deltagare skapar utkast till förslag som andra deltagare kan begära tillgång till för att göra justeringar | V[Aktivera gemensamma utkast]
-  	R -.->|Deltagare kan göra ändringsförslag till andras förslag, men de måste godkännas av förslagsförfattaren | W[Aktivera ändringsförslag]
-    R -.->|Förslagen tas fram på möten | WA[Koppla förslagen till möten i möteskomponenten]
+    %% Sektion 2: Transport
+    S2[**2 Transportmedel**]
+    S2 --> S2Q1{Hur vill du resa till din destination?}
+    S2Q1 -->|Flyg| S2A1[Jämför flygpriser, direktflyg eller mellanlandningar, och miljöpåverkan]
+    S2Q1 -->|Tåg| S2A2[Undersök tåglinjer, nattåg och kombinerade biljetter]
+    S2Q1 -->|Bil| S2A3[Planera rutten, tankstopp och eventuella övernattningar]
+    S2Q1 -->|Båt| S2A4[Utforska kryssningar, färjor eller segelbåtsalternativ]
 
-    X[**4 Beslut**]
-    X --> Y{Hur fattas beslut?}
-    Y --> |Deltagare röstar. Förslag som fått röster upp till en viss gräns går vidare| Z[Aktivera Röster under aktuellt steg för Förslag. Ställ in Minst antal stöd per förslag som gräns och Antal röster per deltagare]
-    Y --> |Deltagare röstar utifrån en bestämd budget där varje förslag får en viss kostnad| BB[Lägg till komponenten Budget. När Förslagsinlämningen är klar importerar du förslag från Förslagskomponenten till Budgetkomponenten.]
-    BB --> BC{Hur väljer deltagarna förslag?}
-    BC --> |Ett visst antal förslag| BD[Test]
-    BC --> |Upp till en viss summa| BE[Test]
-    Y --> |Processen är rådgivande men det ska synas vilka förslag som är populärast| CB[Aktivera gilla-markeringar för aktuellt steg. Eller aktivera Röster under aktuellt steg och sätt Minst antal stöd per förslag till 0 för att inte ha någon specifik gräns för antal röster]
+    S2 --> S2Q2{Hur vill du ta dig runt på plats?}
+    S2Q2 -->|Hyra bil| S2A5[Jämför biluthyrningspriser och försäkringar]
+    S2Q2 -->|Lokal kollektivtrafik| S2A6[Undersök lokala transportkort och appar]
+    S2Q2 -->|Cykel| S2A7[Identifiera cykeluthyrning och cykelvänliga områden]
+    S2Q2 -->|Till fots| S2A8[Välj boende centralt nära huvudattraktioner]
+    S2A5 --> S2Q3{Vilken typ av bil behöver du?}
+    S2Q3 -->|Liten stadsbil| S2A9[Perfekt för stadsutforskning och parkering]
+    S2Q3 -->|SUV/Terrängbil| S2A10[Idealisk för landsbygd och dåliga vägar]
+    S2Q3 -->|Familjebil| S2A11[Bäst för utrymme och komfort]
 
-    DB[**5 Möten**]
-    DB --> HB[Lägg till komponenten Möten]
-    HB --> EB{Är mötena fysiska eller digitala eller olika för olika möten?}
-    EB -.-> |Fysiska| IB[Lägg till möte och ställ in Fysiskt. Lägg till adress och vägbeskrivning.]
-    EB -.-> |Digitala| JB[Lägg till möte och ställ in Digitalt. Lägg till länk till Jitsi för att bädda in videomöte på sidan.]
-    EB -.-> |Hybridmöten| KB[Lägg till möte och ställ in Hybridmöte. Lägg till adress och vägbeskrivning. Lägg till länk till Jitsi för att bädda in videomöte på sidan.]
-    HB --> FB{Behöver deltagare anmäla sig?}
-    HB --> GB{Finns det en dagordning?}
+    %% Sektion 3: Boende
+    S3[**3 Boendealternativ**]
+    S3 --> S3Q1{Vilken typ av boende föredrar du?}
+    S3Q1 -->|Hotell| S3A1[Jämför hotellklasser, faciliteter och recensioner]
+    S3Q1 -->|Hyrd lägenhet| S3A2[Utforska korttidsuthyrningar och deras läge]
+    S3Q1 -->|Bed & Breakfast| S3A3[Sök efter familjägda alternativ med lokal prägel]
+    S3Q1 -->|Camping| S3A4[Identifiera campingplatser och nödvändig utrustning]
+
+    S3 --> S3Q2{Hur viktigt är boendeläget?}
+    S3Q2 -->|Centralt| S3A5[Prioritera boende i stadskärnan eller nära populära områden]
+    S3Q2 -->|Lugnt läge| S3A6[Sök i lugnare stadsdelar eller utanför centrum]
+    S3Q2 -->|Nära stranden| S3A7[Fokusera på strandnära boenden]
+    S3Q2 -->|Naturnära| S3A8[Leta efter boenden i naturreservat eller landsbygd]
+
+    S3A1 --> S3Q3{Vilka hotellfaciliteter är viktigast?}
+    S3Q3 -.->|Pool| S3A9[Välj hotell med poolanläggning]
+    S3Q3 -.->|Gym| S3A10[Säkerställ att hotellet har träningsfaciliteter]
+    S3Q3 -.->|Spa| S3A11[Prioritera hotell med spa-behandlingar]
+    S3Q3 -.->|Restaurang| S3A12[Välj hotell med bra matmöjligheter]
+
+    %% Sektion 4: Aktiviteter
+    S4[**4 Aktivitetsplanering**]
+    S4 --> S4Q1{Vilken aktivitetsnivå söker du?}
+    S4Q1 -->|Avslappnad och lugn| S4A1[Planera lätta promenader, sightseeing i lugnt tempo och gott om vila]
+    S4Q1 -->|Balanserad mix| S4A2[Schemalägg en kombination av aktiviteter och nedvarvning]
+    S4Q1 -->|Intensiv och äventyrlig| S4A3[Fyll dagarna med äventyr, sporter och utforskande]
+
+    S4 --> S4Q2{Föredrar du guidade eller självständiga aktiviteter?}
+    S4Q2 -->|Guidade turer| S4A4[Boka guidade turer i förväg för populära attraktioner]
+    S4Q2 -->|Självständig utforskning| S4A5[Skaffa detaljerade guideböcker och kartor]
+    S4Q2 -->|Blandning av båda| S4A6[Planera några guidade turer och lämna tid för egen utforskning]
+
+    S4 --> S4Q3{Finns det särskilda evenemang du vill uppleva?}
+    S4Q3 -->|Festivaler| S4A7[Undersök lokala festivalkalendrar och boka i förväg]
+    S4Q3 -->|Konserter| S4A8[Kolla evenemangslistor för livemusik]
+    S4Q3 -->|Sportevenemang| S4A9[Kontrollera lokala sportevenemang och biljettillgänglighet]
+    S4Q3 -->|Matmarknader| S4A10[Leta efter säsongsbetonade matmarknader och matvandringer]
+
+    %% Sektion 5: Budget
+    S5[**5 Budgetplanering**]
+    S5 --> S5Q1{Vilken är din ungefärliga budgetnivå?}
+    S5Q1 -->|Budget| S5A1[Fokusera på kostnadseffektiva alternativ för boende, mat och aktiviteter]
+    S5Q1 -->|Mellan| S5A2[Balansera några dyrare upplevelser med prisvärdare alternativ]
+    S5Q1 -->|Lyx| S5A3[Utforska premiumerbjudanden och exklusiva upplevelser]
+
+    S5 --> S5Q2{Hur vill du hantera måltider?}
+    S5Q2 -->|Mestadels restauranger| S5A4[Budgetera för restaurangmåltider]
+    S5Q2 -->|Självhushåll| S5A5[Välj boende med köksmöjligheter och planera för matinköp]
+    S5Q2 -->|Kombination| S5A6[Planera för vissa måltider ute och vissa självlagade]
+
+    S5 --> S5Q3{Hur hanterar du oförutsedda utgifter?}
+    S5Q3 -->|Strikt budget| S5A7[Planera detaljerat och ha en liten reserv]
+    S5Q3 -->|Flexibel budget| S5A8[Sätt en övergripande gräns men var flexibel inom den]
+    S5Q3 -->|Öppen budget| S5A9[Fokusera på upplevelsen snarare än att hålla exakt budget]

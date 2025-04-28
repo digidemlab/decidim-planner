@@ -12,6 +12,9 @@ class FormPDF {
 
     // Binds
     this.handleDownloadClick = this.handleDownloadClick.bind(this);
+    this.generatePDF = this.generatePDF.bind(this);
+    this.addRecommendationsToDoc = this.addRecommendationsToDoc.bind(this);
+    this.addQuestionAnswersToDoc = this.addQuestionAnswersToDoc.bind(this);
   }
 
   /**
@@ -20,14 +23,17 @@ class FormPDF {
   init() {
     if (this.downloadPDFBtn) {
       this.downloadPDFBtn.addEventListener('click', this.handleDownloadClick);
+      this.logDebug('FormPDF initialized');
+    } else {
+      this.logDebug('Download PDF button not found');
     }
-    this.logDebug('FormPDF initialized');
   }
 
   /**
    * Hantera klick på nedladdningsknappen
    */
   handleDownloadClick() {
+    this.logDebug('Download button clicked');
     this.generatePDF();
   }
 
@@ -41,6 +47,7 @@ class FormPDF {
       return;
     }
 
+    this.logDebug('Generating PDF...');
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -56,32 +63,40 @@ class FormPDF {
     // Hämta sektioner från sammanfattningen
     const sectionHeaders = this.summaryContent.querySelectorAll('h3');
 
-    sectionHeaders.forEach(header => {
-      // Sektionsrubrik
-      const sectionTitle = header.textContent;
-      doc.setFont(undefined, 'bold');
-      doc.text(sectionTitle, 20, yPos);
-      doc.setFont(undefined, 'normal');
-      yPos += 10;
+    if (sectionHeaders.length === 0) {
+      this.logDebug('No sections found in summary');
+      // Om det inte finns några sektioner, lägg till ett meddelande
+      doc.text("Ingen sammanfattning tillgänglig. Gör val i formuläret först.", 20, yPos);
+    } else {
+      // Process each section
+      sectionHeaders.forEach(header => {
+        // Sektionsrubrik
+        const sectionTitle = header.textContent;
+        doc.setFont(undefined, 'bold');
+        doc.text(sectionTitle, 20, yPos);
+        doc.setFont(undefined, 'normal');
+        yPos += 10;
 
-      // Hämta sektionens parent-div
-      const sectionDiv = header.parentElement;
+        // Hämta sektionens parent-div
+        const sectionDiv = header.parentElement;
 
-      // Rekommendationer (första UL-elementet efter rubriken)
-      this.addRecommendationsToDoc(doc, sectionDiv, pageWidth, yPos);
+        // Rekommendationer (första UL-elementet efter rubriken)
+        yPos = this.addRecommendationsToDoc(doc, sectionDiv, pageWidth, yPos);
 
-      // Frågor och svar (alla DIV-element med className 'mb-3')
-      this.addQuestionAnswersToDoc(doc, sectionDiv, pageWidth, yPos);
+        // Frågor och svar (alla DIV-element med className 'mb-3')
+        yPos = this.addQuestionAnswersToDoc(doc, sectionDiv, pageWidth, yPos);
 
-      // Kontrollera om vi behöver ny sida
-      if (yPos > 270) {
-        doc.addPage();
-        yPos = 20;
-      }
-    });
+        // Kontrollera om vi behöver ny sida
+        if (yPos > 270) {
+          doc.addPage();
+          yPos = 20;
+        }
+      });
+    }
 
     // Spara PDF
     doc.save('process-sammanfattning.pdf');
+    this.logDebug('PDF generated and saved');
   }
 
   /**
@@ -119,6 +134,48 @@ class FormPDF {
   /**
    * Lägg till frågor och svar i PDF-dokumentet
    */
+  addQuestionAnswersToDoc(doc, sectionDiv, pageWidth, yPos) {
+    const questionDivs = sectionDiv.querySelectorAll('div.mb-3');
+    questionDivs.forEach(questionDiv => {
+      // Frågetext
+      const questionHeader = questionDiv.querySelector('h4');
+      if (questionHeader) {
+        const questionText = questionHeader.textContent;
+        doc.setFont(undefined, 'italic');
+
+        // Hantera långa frågor
+        const questionLines = doc.splitTextToSize(questionText, pageWidth - 50);
+        doc.text(questionLines, 25, yPos);
+        yPos += 6 * questionLines.length;
+
+        doc.setFont(undefined, 'normal');
+      }
+
+      // Svarsalternativ
+      const answers = questionDiv.querySelectorAll('li');
+      answers.forEach(answer => {
+        const answerText = answer.textContent.trim();
+
+        // Hantera långa svar
+        const answerLines = doc.splitTextToSize(answerText, pageWidth - 60);
+        doc.text("- " + answerLines[0], 30, yPos);
+        yPos += 6;
+
+        // Om det finns fler rader, lägg till dem
+        if (answerLines.length > 1) {
+          for (let i = 1; i < answerLines.length; i++) {
+            doc.text("  " + answerLines[i], 30, yPos);
+            yPos += 6;
+          }
+        }
+      });
+
+      yPos += 5; // Extra utrymme efter svar
+    });
+
+    return yPos;
+  }
+
   /**
    * Hjälpmetod för loggning med tidstämpel
    */

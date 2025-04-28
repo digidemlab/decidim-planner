@@ -8,14 +8,20 @@ class TabHandler {
     this.zoomInButton = document.getElementById('zoom-in');
     this.zoomOutButton = document.getElementById('zoom-out');
     this.resetZoomButton = document.getElementById('reset-zoom');
+    this.renderDiagramButton = document.getElementById('render-diagram');
     this.diagramContainer = document.getElementById('diagram-container');
+    this.mermaidDiagram = document.getElementById('mermaid-diagram');
     this.zoomLevel = 1;
+
+    // Originalinnehållet i Mermaid-kodblocket (hämtas från ett data-attribut i template)
+    this.mermaidSource = this.mermaidDiagram ? this.mermaidDiagram.getAttribute('data-source') : '';
 
     // Binds
     this.handleTabChange = this.handleTabChange.bind(this);
     this.handleZoomIn = this.handleZoomIn.bind(this);
     this.handleZoomOut = this.handleZoomOut.bind(this);
     this.handleResetZoom = this.handleResetZoom.bind(this);
+    this.renderMermaidDiagram = this.renderMermaidDiagram.bind(this);
   }
 
   /**
@@ -23,6 +29,14 @@ class TabHandler {
    */
   init() {
     this.setupEventListeners();
+
+    // Om diagram-fliken är aktiv från början, rendera direkt
+    if (document.getElementById('diagram-tab') &&
+        document.getElementById('diagram-tab').classList.contains('active')) {
+      // Kort fördröjning för att låta DOM ladda klart
+      setTimeout(() => this.renderMermaidDiagram(), 100);
+    }
+
     this.logDebug('TabHandler initialized');
   }
 
@@ -46,6 +60,11 @@ class TabHandler {
 
     if (this.resetZoomButton) {
       this.resetZoomButton.addEventListener('click', this.handleResetZoom);
+    }
+
+    // Render-knapp (om den finns)
+    if (this.renderDiagramButton) {
+      this.renderDiagramButton.addEventListener('click', this.renderMermaidDiagram);
     }
   }
 
@@ -73,30 +92,76 @@ class TabHandler {
     event.target.classList.remove('text-gray-500', 'border-transparent');
     event.target.classList.add('text-blue-600', 'border-blue-500');
 
-    document.getElementById(tabId).classList.add('active');
+    const targetTab = document.getElementById(tabId);
+    targetTab.classList.add('active');
 
     this.logDebug(`Tab changed to: ${tabId}`);
 
-    // Om vi byter till diagram-fliken, se till att Mermaid renderar diagrammet
+    // Om vi byter till diagram-fliken, rendera diagrammet
     if (tabId === 'diagram-tab') {
-      this.initMermaidDiagram();
+      // Kort fördröjning för att låta DOM uppdateras
+      setTimeout(() => this.renderMermaidDiagram(), 50);
     }
   }
 
   /**
-   * Tvinga fram Mermaid-diagram rendering
+   * Rendera Mermaid-diagram dynamiskt
    */
-  initMermaidDiagram() {
-    if (window.mermaid) {
-      try {
-        // Fördröj renderingen något för att låta DOM:en uppdateras först
-        setTimeout(() => {
-          window.mermaid.contentLoaded();
-          window.mermaid.init(undefined, document.querySelectorAll('.mermaid'));
-          this.logDebug('Mermaid diagram re-initialized');
-        }, 100);
-      } catch (e) {
-        console.error('Error initializing Mermaid diagram:', e);
+  renderMermaidDiagram() {
+    this.logDebug('Rendering Mermaid diagram...');
+
+    try {
+      // Kontrollera om Mermaid är laddat
+      if (!window.mermaid) {
+        this.logDebug('Mermaid library not loaded');
+        return;
+      }
+
+      // Kontrollera om containern finns
+      if (!this.mermaidDiagram) {
+        this.logDebug('Mermaid diagram container not found');
+        return;
+      }
+
+      // Rensa tidigare innehåll
+      this.mermaidDiagram.innerHTML = '';
+
+      // Lägg till Mermaid-koden i ett pre-element
+      const preMermaid = document.createElement('pre');
+      preMermaid.className = 'mermaid';
+      preMermaid.textContent = this.mermaidSource;
+      this.mermaidDiagram.appendChild(preMermaid);
+
+      // Konfigurera Mermaid
+      window.mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'loose',
+        theme: 'default',
+        flowchart: {
+          htmlLabels: true,
+          curve: 'basis',
+          nodeSpacing: 50,
+          rankSpacing: 80,
+          wrap: true,
+          width: 50
+        },
+        logLevel: 'error'
+      });
+
+      // Rendera diagrammet
+      window.mermaid.contentLoaded();
+      this.logDebug('Mermaid diagram rendered successfully');
+    } catch (error) {
+      this.logDebug('Error rendering Mermaid diagram:', error);
+
+      // Om rendering misslyckas, lägg till ett felmeddelande
+      if (this.mermaidDiagram) {
+        this.mermaidDiagram.innerHTML = `
+          <div class="p-4 bg-red-100 text-red-700 rounded-md">
+            <p>Det gick inte att rendera diagrammet. Försök klicka på "Rendera diagram"-knappen eller ladda om sidan.</p>
+            <p>Tekniskt fel: ${error.message}</p>
+          </div>
+        `;
       }
     }
   }
@@ -145,8 +210,12 @@ class TabHandler {
   /**
    * Hjälpmetod för loggning med tidstämpel
    */
-  logDebug(message) {
+  logDebug(message, error) {
     const timestamp = new Date().toISOString().substr(11, 8);
     console.log(`[${timestamp}] [Tabs] ${message}`);
+
+    if (error) {
+      console.error(error);
+    }
   }
 }
