@@ -1,5 +1,6 @@
 # Planing Tool for Decidim
 
+
 ## Mermaid → Survey
 
 This repo automatically generates an interactive form from a Mermaid diagram file (`form-definition.mmd`) and publishes the result with GitHub Pages.
