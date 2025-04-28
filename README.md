@@ -1,17 +1,17 @@
-# Mermaid → Formulär
+# Mermaid → Survey
 
-Detta repo genererar automatiskt ett interaktivt formulär från en Mermaid-diagramfil (`form-definition.mmd`) och publicerar resultatet med GitHub Pages.
+This repo automatically generates an interactive form from a Mermaid diagram file (`form-definition.mmd`) and publishes the result with GitHub Pages.
 
-## Så fungerar det
+## This is how it works
 
-- Ändra i `form-definition.mmd` (exempel: ett answer tree).
-- Kör `npm run build` eller pusha till GitHub – en GitHub Action bygger automatiskt formuläret.
-- Resultatet publiceras på `https://<användarnamn>.github.io/<repo>`.
+- Make changes to `form-definition.mmd` (example: an answer tree).
+- Run `npm run build` or push to GitHub - a GitHub Action will automatically build the form.
+- The result is published on `https://<username>.github.io/<repo>`.
 
-## Exempel på Mermaid-kod
+## Example of Mermaid code
 
-```mermaid
+````mermaid
 graph LR
-    Q1[1 Typ av process] --> B{Har processen tidsbestämda steg?}
-    B -->|Ja| C[Skapa en Process]
-    B -->|Nej| D[Skapa ett Samråd]
+    Q1[1 Type of process] --> B{Does the process have timed steps?}
+    B -->|Yes| C[Create a Process]
+    B -->|No| D[Create a Consultation]
