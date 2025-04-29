@@ -32,6 +32,8 @@ graph LR
     S3A2 --> S3Q2{Hur skapas förslag?}
     S3A2 --> S3Q3{Är förslagen knutna till geografiska platser?}
     S3Q3 -->|Ja| S3A3[Aktivera Visning på karta]
+    S3A3 -->S3Q3B{Ska förslagslämnarna kunna använda sin aktuella plats automatiskt?}
+    S3Q3B --> |Ja| S3A3B[Installera pluginen Reporting Proposals, som kan användas för att till exempel rapportera om trasiga gatlyktor. Den gör det även möjligt att ta en bild och lägga till, och kontrollera om andra förslag lagts i närheten.]
     S3Q2 -.->|Deltagare skapar egna förslag| S3A4[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
     S3Q2 -.->|Administratör lägger till förslag| S3A5[Aktivera officiella förslag]
     S3Q2 -.->|Deltagare diskuterar fram en längre text mening för mening| S3A6[Aktivera kollaborativa texter]
