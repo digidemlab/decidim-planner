@@ -583,6 +583,40 @@
                   
                 </div>
               
+                
+
+                <div class="question-container mb-8 hidden-question"
+                     id="question-S3Q3B"
+                     data-dependencies="[{&#34;type&#34;:&#34;indirect&#34;,&#34;questionId&#34;:&#34;S3Q3&#34;,&#34;answer&#34;:&#34;Ja&#34;,&#34;multiple&#34;:false,&#34;via&#34;:&#34;S3A3&#34;}]">
+                  <h3 class="text-xl font-medium mb-4">Ska förslagslämnarna kunna använda sin aktuella plats automatiskt?</h3>
+
+                  
+                    <div class="answers-container space-y-3">
+                      
+                        <!-- Om det bara finns ett svarsalternativ, visa som kryssruta -->
+                        <div class="answer flex items-start space-x-3">
+                          <input type="checkbox"
+                                 name="question-S3Q3B"
+                                 id="answer-S3Q3B-0"
+                                 value="S3A3B"
+                                 data-question-id="S3Q3B"
+                                 data-answer-text="Ja"
+                                 class="mt-1 answer-input">
+                          <label for="answer-S3Q3B-0" class="text-lg">
+                            Ja
+
+                            
+                              <span class="text-sm block mt-1 text-gray-600">
+                                Installera pluginen Reporting Proposals, som kan användas för att till exempel rapportera om trasiga gatlyktor. Den gör det även möjligt att ta en bild och lägga till, och kontrollera om andra förslag lagts i närheten.
+                              </span>
+                            
+                          </label>
+                        </div>
+                      
+                    </div>
+                  
+                </div>
+              
             
           </div>
         
@@ -1104,6 +1138,8 @@ graph LR
     S3A2 --&gt; S3Q2{Hur skapas förslag?}
     S3A2 --&gt; S3Q3{Är förslagen knutna till geografiska platser?}
     S3Q3 --&gt;|Ja| S3A3[Aktivera Visning på karta]
+    S3A3 --&gt;S3Q3B{Ska förslagslämnarna kunna använda sin aktuella plats automatiskt?}
+    S3Q3B --&gt; |Ja| S3A3B[Installera pluginen Reporting Proposals, som kan användas för att till exempel rapportera om trasiga gatlyktor. Den gör det även möjligt att ta en bild och lägga till, och kontrollera om andra förslag lagts i närheten.]
     S3Q2 -.-&gt;|Deltagare skapar egna förslag| S3A4[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
     S3Q2 -.-&gt;|Administratör lägger till förslag| S3A5[Aktivera officiella förslag]
     S3Q2 -.-&gt;|Deltagare diskuterar fram en längre text mening för mening| S3A6[Aktivera kollaborativa texter]
@@ -1182,6 +1218,8 @@ graph LR
     S3A2 --&gt; S3Q2{Hur skapas förslag?}
     S3A2 --&gt; S3Q3{Är förslagen knutna till geografiska platser?}
     S3Q3 --&gt;|Ja| S3A3[Aktivera Visning på karta]
+    S3A3 --&gt;S3Q3B{Ska förslagslämnarna kunna använda sin aktuella plats automatiskt?}
+    S3Q3B --&gt; |Ja| S3A3B[Installera pluginen Reporting Proposals, som kan användas för att till exempel rapportera om trasiga gatlyktor. Den gör det även möjligt att ta en bild och lägga till, och kontrollera om andra förslag lagts i närheten.]
     S3Q2 -.-&gt;|Deltagare skapar egna förslag| S3A4[Aktivera Deltagare skapar förslag under aktuellt steg i processen]
     S3Q2 -.-&gt;|Administratör lägger till förslag| S3A5[Aktivera officiella förslag]
     S3Q2 -.-&gt;|Deltagare diskuterar fram en längre text mening för mening| S3A6[Aktivera kollaborativa texter]
