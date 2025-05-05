@@ -7,7 +7,7 @@ graph LR
     S1[**1 Typ av process**]
     S1 --> S1Q1{Har processen tidsbestämda steg?}
     S1Q1 -->|Ja| S1A1[Skapa en Process. Ställ in steg, typiskt sett efter vad som ska gå att göra för deltagare i processen. Till exempel tidsbestämda steg för förslagsinlämning, omröstning, utvärdering, genomförande.]
-    S1Q1 -->|Nej| S1A2[]
+    S1Q1 -->|Nej| S1A2[ ]
     S1A2 --> S1Q2{Ska processen användas specifikt för medborgarförslag eller namninsamlingar?}
     S1Q2 -->|Ja| S1A3[Skapa ett Initiativ. Ställ in minsta antal röster per förslag. Förslagslämnare kan skapa en informationssida om sitt förslag.]
     S1Q2 -->|Nej| S1A4[Skapa ett Samråd. Ställ in samrådet som tidsbegränsat med slutdatum, eller som löpande utan slutdatum. Lägg eventuellt till presentationer av officiella deltagare.]
@@ -15,7 +15,7 @@ graph LR
     %% Sektion 2: Deltagare
     S2[**2 Deltagare**]
     S2 --> S2Q1{Vilka ska kunna delta?}
-    S2Q1 -->|Alla| S2A1[]
+    S2Q1 -->|Alla| S2A1[ ]
     S2Q1 -->|Inbjudna| S2A2[Ställ in som Privat. Lägg till deltagare en och en eller importera en csv-fil med namn och e-postadresser.]
     S2Q1 -->|Deltagare som uppfyller vissa kriterier| S2A3[Aktivera verifiering av deltagare.]
     S2A3 --> S2Q2{Hur ska deltagarna verifieras?}
@@ -25,7 +25,7 @@ graph LR
     S2Q2 -.->|På ett annat sätt.| S2A7[Det går att utveckla egna plugins för verifiering av deltagare.]
     S2A2 --> S2Q3{Vilka ska kunna se processen?}
     S2Q3 -->|Alla| S2A8[Ställ in som Transparent.]
-    S2Q3 -->|Inbjudna| S2A9[]
+    S2Q3 -->|Inbjudna| S2A9[ ]
 
     %% Sektion 3: Förslag
     S3[**3 Förslag**]
